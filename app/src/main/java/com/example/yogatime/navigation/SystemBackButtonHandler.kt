@@ -1,4 +1,4 @@
-package com.nativemobilebits.loginflow.navigation
+package com.example.yogatime.navigation
 
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
