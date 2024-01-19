@@ -89,7 +89,9 @@ fun HeadingTextComponent(value:String){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTextField(labelValue: String, painterResource: Painter) {
+fun MyTextField(labelValue: String, painterResource: Painter,
+                onTextSelected: (String) -> Unit,
+                errorStatus:Boolean = false) {
     val textValue = remember {
         mutableStateOf("")
     }
@@ -112,17 +114,21 @@ fun MyTextField(labelValue: String, painterResource: Painter) {
         maxLines = 1,
         onValueChange = {
             textValue.value = it
+            onTextSelected(it)
         },
         leadingIcon = {
             Icon(painter = painterResource, contentDescription ="" )
-        }
+        },
+        isError = !errorStatus
     )
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTextField(labelValue: String, painterResource: Painter) {
+fun PasswordTextField(labelValue: String, painterResource: Painter,
+                      onTextSelected: (String) -> Unit,
+                      errorStatus: Boolean = false) {
 
     val localFocusManager = LocalFocusManager.current
 
@@ -154,6 +160,7 @@ fun PasswordTextField(labelValue: String, painterResource: Painter) {
         maxLines = 1,
         onValueChange = {
             password.value = it
+            onTextSelected(it)
         },
         leadingIcon = {
             Icon(painter = painterResource, contentDescription ="" )
@@ -176,13 +183,16 @@ fun PasswordTextField(labelValue: String, painterResource: Painter) {
             }
         },
         visualTransformation = if (passwordVisible.value) VisualTransformation.None else
-        PasswordVisualTransformation()
+        PasswordVisualTransformation(),
+        isError = !errorStatus
     )
 }
 
 @Composable
-fun ButtonComponent(value:String){
-    Button(onClick = { /*TODO*/ },
+fun ButtonComponent(value:String, onButtonClicked : () -> Unit){
+    Button(onClick = {
+       onButtonClicked.invoke()
+    },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),

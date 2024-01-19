@@ -1,6 +1,8 @@
 package com.example.yogatime.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,25 +12,28 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.MyTextField
 import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.R
-import com.example.yogatime.app.YogaTimeApp
 import com.example.yogatime.components.ButtonComponent
 import com.example.yogatime.components.ClickableTextComponent
 import com.example.yogatime.components.PasswordTextField
+import com.example.yogatime.data.sighup.SighUpViewModel
+import com.example.yogatime.data.sighup.SignupUIEvent
 import com.example.yogatime.navigation.Screen
+import com.example.yogatime.navigation.SystemBackButtonHandler
 import com.example.yogatime.navigation.YogaTimeAppRouter
-import com.nativemobilebits.loginflow.navigation.SystemBackButtonHandler
 
 
 @Composable
-fun SighUpScreen() {
+fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
     Surface(color = Color.White,
         modifier = Modifier
             .fillMaxSize()
@@ -41,21 +46,42 @@ fun SighUpScreen() {
                 Spacer(modifier = Modifier.height(40.dp))
                 MyTextField(
                     labelValue = stringResource(id = R.string.name),
-                    painterResource = painterResource(id = R.drawable.profile)
+                    painterResource = painterResource(id = R.drawable.profile),
+                    onTextSelected = {
+                        sighUpViewModel.onEvent(SignupUIEvent.fullNameChanged(it))
+                    },
+                    errorStatus = sighUpViewModel.registrationUiState.value.fullNameError
                 )
                 MyTextField(labelValue = stringResource(id = R.string.email),
-                    painterResource = painterResource(id = R.drawable.message)
+                    painterResource = painterResource(id = R.drawable.message),
+                    onTextSelected = {
+                        sighUpViewModel.onEvent(SignupUIEvent.emailChanged(it))
+                    },
+                    errorStatus = sighUpViewModel.registrationUiState.value.emailError
                 )
                 MyTextField(
                     labelValue = stringResource(id = R.string.phone),
-                    painterResource = painterResource(id = R.drawable.profile)
+                    painterResource = painterResource(id = R.drawable.profile),
+                    onTextSelected = {
+                        sighUpViewModel.onEvent(SignupUIEvent.phoneChanged(it))
+                    },
+                    errorStatus = sighUpViewModel.registrationUiState.value.phoneError
                 )
                 PasswordTextField(
                     labelValue = stringResource(id = R.string.password),
-                    painterResource = painterResource(id = R.drawable.ic_lock)
+                    painterResource = painterResource(id = R.drawable.ic_lock),
+                    onTextSelected = {
+                        sighUpViewModel.onEvent(SignupUIEvent.passwordChanged(it))
+                    },
+                    errorStatus = sighUpViewModel.registrationUiState.value.passwordError
                 )
                 Spacer(modifier = Modifier.height(80.dp))
-                ButtonComponent(value = stringResource(id = R.string.register))
+                ButtonComponent(value = stringResource(id = R.string.register),
+                    onButtonClicked ={
+                        sighUpViewModel.onEvent(SignupUIEvent.RegisterButtonClicked)
+                    }
+                )
+
                 Spacer(modifier = Modifier.height(40.dp))
                 ClickableTextComponent(tryingToLogin = true , onTextSelected = {
                     YogaTimeAppRouter.navigateTo(Screen.LoginScreen)
@@ -69,8 +95,8 @@ fun SighUpScreen() {
     }
 }
 
-/*@Preview
+@Preview
 @Composable
 fun DefaultPreviewOfSighUpScreen(){
     SighUpScreen()
-}*/
+}
