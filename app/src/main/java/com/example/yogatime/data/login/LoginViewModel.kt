@@ -1,12 +1,7 @@
 package com.example.yogatime.data.login
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.yogatime.MainActivity
-import com.example.yogatime.app.YogaTimeApp
 import com.example.yogatime.data.rules.Validator
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
@@ -22,6 +17,7 @@ class LoginViewModel : ViewModel() {
     private val TAG = LoginViewModel::class.simpleName
     var loginUiState = mutableStateOf(LoginUIState())
     var allValidationsPassed = mutableStateOf(false)
+    val popupMessage = mutableStateOf<String?>(null)
 
     fun onEvent(event : LoginUIEvent) {
         when (event) {
@@ -89,7 +85,7 @@ class LoginViewModel : ViewModel() {
                         override fun onCancelled(databaseError: DatabaseError) {}
                     })
                 }else{
-                    Log.d(TAG,"not work")
+                    popupMessage.value = "your email or password is not correct"
                 }
             }
     }
