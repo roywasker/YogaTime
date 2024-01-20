@@ -58,7 +58,9 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
             ButtonComponent(value = stringResource(id = R.string.login),
                 onButtonClicked ={
                     loginViewModel.onEvent(LoginUIEvent.LoginButtonClicked)
-                })
+                },
+                isEnabled = loginViewModel.allValidationsPassed.value
+            )
             Spacer(modifier = Modifier.height(20.dp))
             ClickableTextComponent(tryingToLogin = false , onTextSelected ={
                 YogaTimeAppRouter.navigateTo(Screen.SignUpScreen)

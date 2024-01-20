@@ -189,7 +189,7 @@ fun PasswordTextField(labelValue: String, painterResource: Painter,
 }
 
 @Composable
-fun ButtonComponent(value:String, onButtonClicked : () -> Unit){
+fun ButtonComponent(value:String, onButtonClicked : () -> Unit, isEnabled : Boolean = false){
     Button(onClick = {
        onButtonClicked.invoke()
     },
@@ -197,7 +197,8 @@ fun ButtonComponent(value:String, onButtonClicked : () -> Unit){
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        enabled = isEnabled
         ) {
             Box(modifier = Modifier
                 .fillMaxWidth()

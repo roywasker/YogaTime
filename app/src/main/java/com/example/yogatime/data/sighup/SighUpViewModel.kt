@@ -1,13 +1,21 @@
 package com.example.yogatime.data.sighup
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.yogatime.app.YogaTimeApp
 import com.example.yogatime.data.rules.Validator
+import com.example.yogatime.navigation.Screen
+import com.example.yogatime.navigation.YogaTimeAppRouter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 
 class SighUpViewModel : ViewModel() {
 
     var registrationUiState = mutableStateOf(RegistrationUiState())
+
+    var allValidationsPassed = mutableStateOf(false)
 
     fun onEvent(event : SignupUIEvent){
         when(event){
@@ -42,7 +50,12 @@ class SighUpViewModel : ViewModel() {
     }
 
     private fun singUp() {
-        validateDataWithRules()
+        createUserInFirebase(
+            fullName = registrationUiState.value.fullName,
+            email = registrationUiState.value.email,
+            phone = registrationUiState.value.phone,
+            password = registrationUiState.value.password
+        )
     }
 
     private fun validateDataWithRules() {
@@ -65,7 +78,36 @@ class SighUpViewModel : ViewModel() {
             phoneError = phoneResult.status,
             passwordError = passwordResult.status
         )
+
+        allValidationsPassed.value = fullNameResult.status &&emailResult.status && phoneResult.status && passwordResult.status
     }
 
+    private fun createUserInFirebase(fullName : String, email : String, phone :String, password : String){
+
+        FirebaseAuth.getInstance()
+            .createUserWithEmailAndPassword(email,password)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val user = FirebaseAuth.getInstance().currentUser
+                    user?.let {
+                        val uid = it.uid
+                        val database = FirebaseDatabase.getInstance()
+                        val usersReference = database.reference.child("users").child(uid)
+
+                        val userMap = hashMapOf(
+                            "fullName" to fullName,
+                            "email" to email,
+                            "phone" to phone,
+                            "isCoach" to false
+                        )
+
+                        usersReference.setValue(userMap)
+                            .addOnSuccessListener {
+                                YogaTimeAppRouter.navigateTo(Screen.HomeScreen)
+                            }
+                    }
+                }
+            }
+    }
 
 }

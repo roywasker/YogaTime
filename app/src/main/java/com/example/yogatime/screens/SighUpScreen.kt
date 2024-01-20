@@ -1,8 +1,6 @@
 package com.example.yogatime.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +10,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +37,7 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
             .background(Color.White)
             .padding(18.dp)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
                 NormalTextComponent(value = stringResource(id = R.string.hello ))
                 HeadingTextComponent(value = stringResource(id = R.string.Create_an_Account))
                 Spacer(modifier = Modifier.height(40.dp))
@@ -61,7 +58,7 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
                 )
                 MyTextField(
                     labelValue = stringResource(id = R.string.phone),
-                    painterResource = painterResource(id = R.drawable.profile),
+                    painterResource = painterResource(id = R.drawable.phone),
                     onTextSelected = {
                         sighUpViewModel.onEvent(SignupUIEvent.phoneChanged(it))
                     },
@@ -79,7 +76,8 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
                 ButtonComponent(value = stringResource(id = R.string.register),
                     onButtonClicked ={
                         sighUpViewModel.onEvent(SignupUIEvent.RegisterButtonClicked)
-                    }
+                    },
+                    isEnabled = sighUpViewModel.allValidationsPassed.value
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
