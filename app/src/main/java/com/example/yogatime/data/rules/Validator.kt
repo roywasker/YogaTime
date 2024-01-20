@@ -3,9 +3,8 @@ package com.example.yogatime.data.rules
 object Validator {
 
     fun validatorFullName(fullName : String) : ValidationResult{
-        val allLetters = fullName.all { it.isLetter() }
         return ValidationResult(
-            (!fullName.isNullOrEmpty()&&allLetters)
+            (!fullName.isNullOrEmpty())
         )
     }
 

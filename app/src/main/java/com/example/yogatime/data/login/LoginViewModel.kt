@@ -1,11 +1,25 @@
 package com.example.yogatime.data.login
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.yogatime.MainActivity
+import com.example.yogatime.app.YogaTimeApp
 import com.example.yogatime.data.rules.Validator
+import com.example.yogatime.navigation.Screen
+import com.example.yogatime.navigation.YogaTimeAppRouter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+
 
 class LoginViewModel : ViewModel() {
 
+    private val TAG = LoginViewModel::class.simpleName
     var loginUiState = mutableStateOf(LoginUIState())
     var allValidationsPassed = mutableStateOf(false)
 
@@ -44,5 +58,40 @@ class LoginViewModel : ViewModel() {
         allValidationsPassed.value = emailResult.status && passwordResult.status
     }
 
-    private fun login() {}
+    private fun login() {
+
+        val email = loginUiState.value.email
+        val password = loginUiState.value.password
+
+        FirebaseAuth.getInstance()
+            .signInWithEmailAndPassword(email,password)
+            .addOnCompleteListener{
+                if (it.isSuccessful){
+                    YogaTimeAppRouter.navigateTo(Screen.HomeScreen)
+                    val user = FirebaseAuth.getInstance().currentUser
+                    var isCoach = false
+                    val databaseReference = FirebaseDatabase.getInstance().reference
+                    val userReference = user?.let { it1 ->
+                        databaseReference.child("users").child(it1.uid)
+                    }
+                    userReference?.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                            if (dataSnapshot.exists()) {
+                                isCoach = dataSnapshot.child("isCoach").value as Boolean
+                                if (isCoach){
+                                    YogaTimeAppRouter.navigateTo(Screen.HomeScreen2)
+                                }else{
+                                    YogaTimeAppRouter.navigateTo(Screen.HomeScreen)
+                                }
+                            }
+                        }
+                        override fun onCancelled(databaseError: DatabaseError) {}
+                    })
+                }else{
+                    Log.d(TAG,"not work")
+                }
+            }
+    }
+
 }

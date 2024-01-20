@@ -8,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
+import com.example.yogatime.screens.HomeSrceen
+import com.example.yogatime.screens.HomeSrceen2
 import com.example.yogatime.screens.LoginScreen
 import com.example.yogatime.screens.SighUpScreen
 
@@ -24,6 +26,12 @@ fun YogaTimeApp(){
                 }
                 is Screen.LoginScreen ->{
                     LoginScreen()
+                }
+                is Screen.HomeScreen ->{
+                    HomeSrceen()
+                }
+                is Screen.HomeScreen2 ->{
+                    HomeSrceen2()
                 }
             }
         }
