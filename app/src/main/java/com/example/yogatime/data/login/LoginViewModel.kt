@@ -76,7 +76,7 @@ class LoginViewModel : ViewModel() {
                                 if (isCoach){
                                     YogaTimeAppRouter.navigateTo(Screen.HomeScreen2)
                                 }else{
-                                    YogaTimeAppRouter.navigateTo(Screen.HomeScreen)
+                                    YogaTimeAppRouter.navigateTo(Screen.ClientHomeScreen)
                                 }
                             }
                         }

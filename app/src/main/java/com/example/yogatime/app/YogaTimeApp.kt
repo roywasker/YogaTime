@@ -14,6 +14,9 @@ import com.example.yogatime.screens.HomeSrceen
 import com.example.yogatime.screens.HomeSrceen2
 import com.example.yogatime.screens.LoginScreen
 import com.example.yogatime.screens.SighUpScreen
+import com.example.yogatime.screens.ClientHomeScreen
+import com.example.yogatime.screens.ClientProfileScreen
+
 
 @Composable
 fun YogaTimeApp(){
@@ -29,8 +32,11 @@ fun YogaTimeApp(){
                 is Screen.LoginScreen ->{
                     LoginScreen()
                 }
-                is Screen.HomeScreen ->{
-                    HomeSrceen()
+                is Screen.ClientHomeScreen ->{
+                    ClientHomeScreen()
+                }
+                is Screen.ClientProflieScreen ->{
+                    ClientProfileScreen()
                 }
                 is Screen.HomeScreen2 ->{
                     HomeSrceen2()
