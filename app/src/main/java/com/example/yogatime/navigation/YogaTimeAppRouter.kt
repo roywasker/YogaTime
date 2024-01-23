@@ -7,7 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 sealed class Screen {
     object SignUpScreen : Screen()
     object LoginScreen : Screen()
-    object HomeScreen : Screen()
+    object ClientHomeScreen : Screen()
+    object ClientProflieScreen : Screen()
     object HomeScreen2 : Screen()
     object GalleryScreen : Screen()
     object AddNewEventScreen : Screen()
@@ -17,7 +18,7 @@ sealed class Screen {
 
 object YogaTimeAppRouter {
 
-    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.LoginScreen)
+    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.ClientHomeScreen)
 
     fun navigateTo(destination : Screen){
         currentScreen.value = destination
