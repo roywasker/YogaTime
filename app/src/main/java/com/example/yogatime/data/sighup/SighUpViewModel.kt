@@ -103,7 +103,7 @@ class SighUpViewModel : ViewModel() {
 
                         usersReference.setValue(userMap)
                             .addOnSuccessListener {
-                                YogaTimeAppRouter.navigateTo(Screen.HomeScreen)
+                                YogaTimeAppRouter.navigateTo(Screen.ClientHomeScreen)
                             }
                     }
                 }
