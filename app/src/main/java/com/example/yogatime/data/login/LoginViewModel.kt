@@ -14,7 +14,6 @@ import com.google.firebase.database.ValueEventListener
 
 class LoginViewModel : ViewModel() {
 
-    private val TAG = LoginViewModel::class.simpleName
     var loginUiState = mutableStateOf(LoginUIState())
     var allValidationsPassed = mutableStateOf(false)
     val popupMessage = mutableStateOf<String?>(null)
@@ -63,7 +62,6 @@ class LoginViewModel : ViewModel() {
             .signInWithEmailAndPassword(email,password)
             .addOnCompleteListener{
                 if (it.isSuccessful){
-                    YogaTimeAppRouter.navigateTo(Screen.HomeScreen)
                     val user = FirebaseAuth.getInstance().currentUser
                     var isCoach = false
                     val databaseReference = FirebaseDatabase.getInstance().reference
