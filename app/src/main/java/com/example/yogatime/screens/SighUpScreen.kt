@@ -19,8 +19,12 @@ import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.MyTextField
 import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.R
+import com.example.yogatime.components.BirthdayDatePicker
 import com.example.yogatime.components.ButtonComponent
 import com.example.yogatime.components.ClickableTextComponent
+import com.example.yogatime.components.DateFromTodayPicker
+import com.example.yogatime.components.MyEmailField
+import com.example.yogatime.components.MyPhoneField
 import com.example.yogatime.components.PasswordTextField
 import com.example.yogatime.data.sighup.SighUpViewModel
 import com.example.yogatime.data.sighup.SignupUIEvent
@@ -49,21 +53,28 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
                     },
                     errorStatus = sighUpViewModel.registrationUiState.value.fullNameError
                 )
-                MyTextField(labelValue = stringResource(id = R.string.email),
+                MyEmailField(labelValue = stringResource(id = R.string.email),
                     painterResource = painterResource(id = R.drawable.message),
                     onTextSelected = {
                         sighUpViewModel.onEvent(SignupUIEvent.emailChanged(it))
                     },
                     errorStatus = sighUpViewModel.registrationUiState.value.emailError
                 )
-                MyTextField(
-                    labelValue = stringResource(id = R.string.phone),
+//                DateFromTodayPicker(labelValue = stringResource(id = R.string.date_of_birth),
+//                    painterResource(id = R.drawable.ic_calendar) ,
+//                    onDateSelected ={sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) } )
+
+                BirthdayDatePicker(labelValue = stringResource(id = R.string.date_of_birth) ,
+                    onDateSelected  = { sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) })
+
+                MyPhoneField(labelValue = stringResource(id = R.string.phone) ,
                     painterResource = painterResource(id = R.drawable.phone),
                     onTextSelected = {
                         sighUpViewModel.onEvent(SignupUIEvent.phoneChanged(it))
                     },
-                    errorStatus = sighUpViewModel.registrationUiState.value.phoneError
-                )
+                    errorStatus = sighUpViewModel.registrationUiState.value.phoneError )
+
+
                 PasswordTextField(
                     labelValue = stringResource(id = R.string.password),
                     painterResource = painterResource(id = R.drawable.ic_lock),

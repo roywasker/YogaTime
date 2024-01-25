@@ -7,6 +7,8 @@ sealed class SignupUIEvent {
     data class phoneChanged(val phone:String) : SignupUIEvent()
     data class passwordChanged(val password:String) : SignupUIEvent()
 
+    data class dateOfBirthChanged(val dateOfBirth:String) : SignupUIEvent()
+
     object RegisterButtonClicked : SignupUIEvent()
 
 }

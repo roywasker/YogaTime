@@ -46,6 +46,12 @@ class SighUpViewModel : ViewModel() {
             is SignupUIEvent.RegisterButtonClicked ->{
                 singUp()
             }
+            is SignupUIEvent.dateOfBirthChanged ->{
+                registrationUiState.value = registrationUiState.value.copy(
+                    dateOfBirth = event.dateOfBirth
+                )
+                validateDataWithRules()
+            }
         }
     }
 
