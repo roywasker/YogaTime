@@ -1,45 +1,38 @@
 package com.example.yogatime.screens
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.Surface
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import com.example.yogatime.components.HeadingTextComponent
-import com.example.yogatime.components.PickImageFromGallery
-import com.example.yogatime.data.gallery.GalleryScreenViewModel
-
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
+import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
-import com.example.yogatime.components.NormalTextComponent
-import com.example.yogatime.components.SinglePhotoPicker
-import com.example.yogatime.data.Client.ClientProfileUIEvent
-import com.example.yogatime.data.gallery.GalleryUIEvent
+import com.example.yogatime.data.Manager.ManagerHomeUIEvent
+import com.example.yogatime.data.Manager.ManagerHomeViewModel
+import com.example.yogatime.navigation.Screen
+import com.example.yogatime.navigation.YogaTimeAppRouter
 import kotlinx.coroutines.launch
+import androidx.compose.material.Surface
 
 
 @Composable
-fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) {
-
+fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel()) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    galleryScreenViewModel.getUserData()
+    managerHomeViewModel.getUserData()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -52,30 +45,37 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            NavigationDrawerHeader(galleryScreenViewModel.fullNameId.value)
-            NavigationDrawerBody(navigationDrawerItems = galleryScreenViewModel.navigationItemsList,
+            NavigationDrawerHeader(managerHomeViewModel.fullNameId.value)
+            NavigationDrawerBody(navigationDrawerItems = managerHomeViewModel.navigationItemsList,
                 onNavigationItemClicked = {
                     if (it.itemId == "LogoutButton"){
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.LogoutButtonClicked)
-                    }else if (it.itemId == "homeScreen"){
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.HomeButtonClicked)
+                        managerHomeViewModel.onEvent(ManagerHomeUIEvent.LogoutButtonClicked)
                     }else if (it.itemId == "profileScreen"){
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.ProfileButtonClicked)
+                        managerHomeViewModel.onEvent(ManagerHomeUIEvent.ProfileButtonClicked)
                     }
                 }
             )
         }
     ) {paddingValues ->
-        Surface(
-            color = Color.White,
+        Surface(color = Color.White,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValues)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                HeadingTextComponent(value = "Upload Image to Gallery")
-                SinglePhotoPicker()
+                HeadingTextComponent(value = "Home page")
+                Button(onClick = {
+                    YogaTimeAppRouter.navigateTo(Screen.AddNewEventScreen)
+                }) {
+                    Text("Go to Add New Event")
+                }
+
+                Button(onClick = {
+                    YogaTimeAppRouter.navigateTo(Screen.GalleryScreen)
+                }) {
+                    Text("Go to Gallery")
+                }
             }
         }
     }

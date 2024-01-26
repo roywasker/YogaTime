@@ -74,9 +74,9 @@ class LoginViewModel : ViewModel() {
                             if (dataSnapshot.exists()) {
                                 isCoach = dataSnapshot.child("isCoach").value as Boolean
                                 if (isCoach){
-                                    YogaTimeAppRouter.navigateTo(Screen.HomeScreen2)
-                                }else{
                                     YogaTimeAppRouter.navigateTo(Screen.ClientHomeScreen)
+                                }else{
+                                    YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
                                 }
                             }
                         }

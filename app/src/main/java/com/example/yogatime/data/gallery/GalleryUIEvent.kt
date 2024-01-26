@@ -1,9 +1,13 @@
 package com.example.yogatime.data.gallery
 
-sealed class GalleryUIEventUIEvent{
 
-    data class ImageSelected(val image:String): GalleryUIEventUIEvent()
-    data class ImageUnSelected(val image:String): GalleryUIEventUIEvent()
+sealed class GalleryUIEvent{
 
-    object UploadButtonClicked : GalleryUIEventUIEvent()
+    data class ImageSelected(val image:String): GalleryUIEvent()
+    data class ImageUnSelected(val image:String): GalleryUIEvent()
+
+    object UploadButtonClicked : GalleryUIEvent()
+    object LogoutButtonClicked : GalleryUIEvent()
+    object ProfileButtonClicked : GalleryUIEvent()
+    object HomeButtonClicked : GalleryUIEvent()
 }

@@ -10,12 +10,12 @@ import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import com.example.yogatime.screens.AddNewEventScreen
 import com.example.yogatime.screens.GalleryScreen
-import com.example.yogatime.screens.HomeSrceen
-import com.example.yogatime.screens.HomeSrceen2
 import com.example.yogatime.screens.LoginScreen
 import com.example.yogatime.screens.SighUpScreen
 import com.example.yogatime.screens.ClientHomeScreen
 import com.example.yogatime.screens.ClientProfileScreen
+import com.example.yogatime.screens.ManagerHomeScreen
+import com.example.yogatime.screens.ManagerProfileScreen
 
 
 @Composable
@@ -38,8 +38,11 @@ fun YogaTimeApp(){
                 is Screen.ClientProflieScreen ->{
                     ClientProfileScreen()
                 }
-                is Screen.HomeScreen2 ->{
-                    HomeSrceen2()
+                is Screen.ManagerHomeScreen ->{
+                    ManagerHomeScreen()
+                }
+                is Screen.ManagerProfileScreen ->{
+                    ManagerProfileScreen()
                 }
                 is Screen.GalleryScreen ->{
                     GalleryScreen()
