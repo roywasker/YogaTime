@@ -612,6 +612,10 @@ fun NavigationDrawerHeader(value: String?) {
         NavigationDrawerText(
             title = value?:stringResource(R.string.navigation_header), 28.sp , AccentColor
         )
+
+    }
+}
+
 @Composable
 fun PickImageFromGallery(viewModel: GalleryScreenViewModel) {
 
@@ -767,7 +771,7 @@ fun NavigationDrawerText(title: String, textUnit: TextUnit,color: Color) {
         )
     )
 }
-fun dropDownMenu() {
+/*fun dropDownMenu() {
 
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
@@ -805,5 +809,4 @@ fun dropDownMenu() {
         ) {
         }
     }
-}
-
+}*/
