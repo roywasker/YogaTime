@@ -10,6 +10,8 @@ sealed class Screen {
     object HomeScreen : Screen()
     object HomeScreen2 : Screen()
     object GalleryScreen : Screen()
+    object AddNewEventScreen : Screen()
+
 }
 
 

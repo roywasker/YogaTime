@@ -74,11 +74,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.TextField
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.liveData
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import java.util.*
@@ -90,6 +102,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+
+
 
 
 @Composable
@@ -640,8 +654,44 @@ fun SinglePhotoPicker(){
     }
 }
 
+@Composable
+fun dropDownMenu() {
+
+    var expanded by remember { mutableStateOf(false) }
+    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
+    var selectedText by remember { mutableStateOf("") }
+
+    var textfieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
 
 
-
-
+    Column(Modifier.padding(20.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { selectedText = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    //This value is used to assign to the DropDown the same width
+                    textfieldSize = coordinates.size.toSize()
+                },
+            label = { Text("Label") },
+            trailingIcon = {
+                Icon(icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded })
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
+        ) {
+        }
+    }
+}
 

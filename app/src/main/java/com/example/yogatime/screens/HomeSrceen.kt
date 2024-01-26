@@ -29,10 +29,19 @@ fun HomeSrceen () {
         Column(modifier = Modifier.fillMaxSize()) {
             HeadingTextComponent(value = "Home page")
             Button(onClick = {
+                YogaTimeAppRouter.navigateTo(Screen.AddNewEventScreen)
+            }) {
+                Text("Go to Add New Event")
+            }
+
+            Button(onClick = {
                 YogaTimeAppRouter.navigateTo(Screen.GalleryScreen)
             }) {
                 Text("Go to Gallery")
             }
+
+
+
 
         }
     }
