@@ -66,7 +66,8 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
 //                    onDateSelected ={sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) } )
 
                 BirthdayDatePicker(labelValue = stringResource(id = R.string.date_of_birth) ,
-                    onDateSelected  = { sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) })
+                    onDateSelected  = { sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) },
+                    errorStatus = sighUpViewModel.registrationUiState.value.dateOfBirthError)
 
 //            DateFromTodayCompose()
 

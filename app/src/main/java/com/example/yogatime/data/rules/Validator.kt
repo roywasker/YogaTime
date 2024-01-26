@@ -26,6 +26,12 @@ object Validator {
             (!password.isNullOrEmpty() && password.length>=6)
         )
     }
+
+    fun validatorDateOfBirth(dateOfBirth : String) : ValidationResult{
+        return ValidationResult(
+            (!dateOfBirth.isNullOrEmpty())
+        )
+    }
 }
 
 data class ValidationResult(

@@ -60,7 +60,8 @@ class SighUpViewModel : ViewModel() {
             fullName = registrationUiState.value.fullName,
             email = registrationUiState.value.email,
             phone = registrationUiState.value.phone,
-            password = registrationUiState.value.password
+            password = registrationUiState.value.password,
+            dateOfBirth = registrationUiState.value.dateOfBirth
         )
     }
 
@@ -77,18 +78,22 @@ class SighUpViewModel : ViewModel() {
         val passwordResult = Validator.validatorPassword(
             password = registrationUiState.value.password
         )
+        val dateOfBirthResult = Validator.validatorDateOfBirth(
+            dateOfBirth = registrationUiState.value.dateOfBirth
+        )
 
         registrationUiState.value = registrationUiState.value.copy(
             fullNameError = fullNameResult.status,
             emailError = emailResult.status,
             phoneError = phoneResult.status,
-            passwordError = passwordResult.status
+            passwordError = passwordResult.status,
+            dateOfBirthError =dateOfBirthResult.status
         )
 
-        allValidationsPassed.value = fullNameResult.status &&emailResult.status && phoneResult.status && passwordResult.status
+        allValidationsPassed.value = fullNameResult.status &&emailResult.status && phoneResult.status && passwordResult.status&&dateOfBirthResult.status
     }
 
-    private fun createUserInFirebase(fullName : String, email : String, phone :String, password : String){
+    private fun createUserInFirebase(fullName : String, email : String, phone :String, password : String,dateOfBirth : String ){
 
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(email,password)
@@ -104,7 +109,8 @@ class SighUpViewModel : ViewModel() {
                             "fullName" to fullName,
                             "email" to email,
                             "phone" to phone,
-                            "isCoach" to false
+                            "isCoach" to false,
+                            "dateOfBirth" to dateOfBirth
                         )
 
                         usersReference.setValue(userMap)
