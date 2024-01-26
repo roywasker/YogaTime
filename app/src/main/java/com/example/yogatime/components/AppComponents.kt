@@ -63,6 +63,7 @@ import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -78,8 +79,17 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.liveData
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import java.util.*
+
+import coil.compose.AsyncImage
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 
 
 @Composable
@@ -581,3 +591,57 @@ fun PickImageFromGallery(viewModel: GalleryScreenViewModel) {
     }
 
 }
+
+@Composable
+fun SinglePhotoPicker(){
+    var uri by remember{
+        mutableStateOf<Uri?>(null)
+    }
+    val singlePhotoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            uri = it
+        }
+    )
+
+    val context = LocalContext.current
+
+
+    Column{
+
+
+        AsyncImage(model = uri, contentDescription = null, modifier = Modifier.size(248.dp))
+
+        Button(onClick = {
+            singlePhotoPicker.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+
+        }){
+            Text("Pick Image")
+        }
+
+        if(uri != null) {
+
+            Button(onClick = {
+                uri?.let {
+
+                    GalleryScreenViewModel.uploadToStorage(uri = it, context = context)
+                }
+
+            }) {
+                Text("Upload")
+            }
+        }
+
+
+
+
+    }
+}
+
+
+
+
+
+

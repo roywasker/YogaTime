@@ -22,6 +22,7 @@ import com.example.yogatime.R
 import com.example.yogatime.components.BirthdayDatePicker
 import com.example.yogatime.components.ButtonComponent
 import com.example.yogatime.components.ClickableTextComponent
+import com.example.yogatime.components.DateFromTodayCompose
 import com.example.yogatime.components.DateFromTodayPicker
 import com.example.yogatime.components.MyEmailField
 import com.example.yogatime.components.MyPhoneField
@@ -66,6 +67,9 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
 
                 BirthdayDatePicker(labelValue = stringResource(id = R.string.date_of_birth) ,
                     onDateSelected  = { sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) })
+
+//            DateFromTodayCompose()
+
 
                 MyPhoneField(labelValue = stringResource(id = R.string.phone) ,
                     painterResource = painterResource(id = R.drawable.phone),
