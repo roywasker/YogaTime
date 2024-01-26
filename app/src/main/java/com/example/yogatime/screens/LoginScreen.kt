@@ -22,6 +22,7 @@ import com.example.yogatime.R
 import com.example.yogatime.components.ButtonComponent
 import com.example.yogatime.components.ClickableTextComponent
 import com.example.yogatime.components.HeadingTextComponent
+import com.example.yogatime.components.MyEmailField
 import com.example.yogatime.components.MyTextField
 import com.example.yogatime.components.PasswordTextField
 import com.example.yogatime.data.login.LoginUIEvent
@@ -41,7 +42,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
             NormalTextComponent(value = stringResource(id = R.string.login))
             HeadingTextComponent(value = stringResource(id = R.string.welcome))
             Spacer(modifier = Modifier.height(40.dp))
-            MyTextField(labelValue = stringResource(id = R.string.email),
+            MyEmailField(labelValue = stringResource(id = R.string.email),
                 painterResource = painterResource(id = R.drawable.message),
                 onTextSelected = {
                     loginViewModel.onEvent(LoginUIEvent.EmailChanged(it))

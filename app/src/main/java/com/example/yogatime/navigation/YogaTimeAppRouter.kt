@@ -10,6 +10,9 @@ sealed class Screen {
     object ClientHomeScreen : Screen()
     object ClientProflieScreen : Screen()
     object HomeScreen2 : Screen()
+    object GalleryScreen : Screen()
+    object AddNewEventScreen : Screen()
+
 }
 
 
