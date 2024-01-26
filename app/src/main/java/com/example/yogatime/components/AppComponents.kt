@@ -403,7 +403,7 @@ fun BirthdayDatePicker(
     labelValue: String,
     onDateSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
-) {
+    errorStatus: Boolean = false) {
     val context = LocalContext.current
     var selectedDate by remember { mutableStateOf("") }
     val calendar = Calendar.getInstance()
@@ -455,7 +455,8 @@ fun BirthdayDatePicker(
         maxLines = 1,
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Next
-        )
+        ),
+        isError = !errorStatus
     )
 }
 
