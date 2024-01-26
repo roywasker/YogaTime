@@ -7,9 +7,11 @@ data class RegistrationUiState(
     var email: String = "",
     var phone: String = "",
     var password: String = "",
+    var dateOfBirth: String = "",
 
     var fullNameError: Boolean = false,
     var emailError: Boolean = false,
     var phoneError: Boolean = false,
-    var passwordError: Boolean = false
+    var passwordError: Boolean = false,
+    var dateOfBirthError: Boolean = false
 )
