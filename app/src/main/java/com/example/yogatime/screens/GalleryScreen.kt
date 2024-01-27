@@ -29,6 +29,7 @@ import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.components.SinglePhotoPicker
 import com.example.yogatime.data.Client.ClientProfileUIEvent
+import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GalleryUIEvent
 import kotlinx.coroutines.launch
 
@@ -39,7 +40,7 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    galleryScreenViewModel.getUserData()
+    ToolBar.getUserData()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -52,8 +53,8 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            NavigationDrawerHeader(galleryScreenViewModel.fullNameId.value)
-            NavigationDrawerBody(navigationDrawerItems = galleryScreenViewModel.navigationItemsList,
+            NavigationDrawerHeader(ToolBar.fullNameId.value)
+            NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
                     if (it.itemId == "LogoutButton"){
                         galleryScreenViewModel.onEvent(GalleryUIEvent.LogoutButtonClicked)

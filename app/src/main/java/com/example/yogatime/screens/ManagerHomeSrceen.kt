@@ -25,6 +25,7 @@ import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import kotlinx.coroutines.launch
 import androidx.compose.material.Surface
+import com.example.yogatime.data.ToolBar
 
 
 @Composable
@@ -32,7 +33,7 @@ fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel())
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    managerHomeViewModel.getUserData()
+    ToolBar.getUserData()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -45,8 +46,8 @@ fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel())
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            NavigationDrawerHeader(managerHomeViewModel.fullNameId.value)
-            NavigationDrawerBody(navigationDrawerItems = managerHomeViewModel.navigationItemsList,
+            NavigationDrawerHeader(ToolBar.fullNameId.value)
+            NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
                     if (it.itemId == "LogoutButton"){
                         managerHomeViewModel.onEvent(ManagerHomeUIEvent.LogoutButtonClicked)

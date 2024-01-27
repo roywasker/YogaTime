@@ -21,6 +21,7 @@ import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.Client.ClientProfileViewModel
+import com.example.yogatime.data.ToolBar
 import kotlinx.coroutines.launch
 
 @Composable
@@ -28,7 +29,7 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    clientProfileViewModel.getUserData()
+    ToolBar.getUserData()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -41,8 +42,8 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            NavigationDrawerHeader(clientProfileViewModel.fullNameId.value)
-            NavigationDrawerBody(navigationDrawerItems = clientProfileViewModel.navigationItemsList,
+            NavigationDrawerHeader(ToolBar.fullNameId.value)
+            NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
                     if (it.itemId == "LogoutButton"){
                         clientProfileViewModel.onEvent(ClientProfileUIEvent.LogoutButtonClicked)
@@ -60,9 +61,9 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                 .padding(paddingValues)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                HeadingTextComponent(value = "Hey , ${clientProfileViewModel.fullNameId.value}")
-                NormalTextComponent(value = "Email : ${clientProfileViewModel.emailId.value}")
-                NormalTextComponent(value = "Phone : ${clientProfileViewModel.phoneId.value}")
+                HeadingTextComponent(value = "Hey , ${ToolBar.fullNameId.value}")
+                NormalTextComponent(value = "Email : ${ToolBar.emailId.value}")
+                NormalTextComponent(value = "Phone : ${ToolBar.phoneId.value}")
             }
         }
     }

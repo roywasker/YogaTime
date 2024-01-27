@@ -611,7 +611,7 @@ fun NavigationDrawerHeader(value: String?) {
     ) {
 
         NavigationDrawerText(
-            title = value?:stringResource(R.string.navigation_header), 28.sp , AccentColor
+            title = value?:stringResource(R.string.yoga_time), 28.sp , AccentColor
         )
 
     }
