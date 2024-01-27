@@ -36,6 +36,7 @@ import com.example.yogatime.components.PickImageFromGallery
 import com.example.yogatime.components.SinglePhotoPicker
 import com.example.yogatime.data.Manager.AddEventScreenViewModel
 import com.example.yogatime.data.Manager.AddEventUIEvent
+import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import com.example.yogatime.data.gallery.GalleryUIEvent
 import com.example.yogatime.data.login.LoginUIEvent
@@ -52,7 +53,7 @@ fun AddNewEventScreen(addEventViewModel: AddEventScreenViewModel = viewModel()) 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    addEventViewModel.getUserData()
+    ToolBar.getUserData()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -65,8 +66,8 @@ fun AddNewEventScreen(addEventViewModel: AddEventScreenViewModel = viewModel()) 
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            NavigationDrawerHeader(addEventViewModel.fullNameId.value)
-            NavigationDrawerBody(navigationDrawerItems = addEventViewModel.navigationItemsList,
+            NavigationDrawerHeader(ToolBar.fullNameId.value)
+            NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
                     if (it.itemId == "LogoutButton"){
                         addEventViewModel.onEvent(AddEventUIEvent.LogoutButtonClicked)

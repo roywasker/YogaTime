@@ -21,6 +21,7 @@ import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.data.Client.ClienHomeUIEvent
 import com.example.yogatime.data.Client.ClientHomeViewModel
+import com.example.yogatime.data.ToolBar
 import kotlinx.coroutines.launch
 
 
@@ -30,7 +31,7 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    clientHomeViewModel.getUserData()
+    ToolBar.getUserData()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -43,8 +44,8 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            NavigationDrawerHeader(clientHomeViewModel.fullNameId.value)
-            NavigationDrawerBody(navigationDrawerItems = clientHomeViewModel.navigationItemsList,
+            NavigationDrawerHeader(ToolBar.fullNameId.value)
+            NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
                     if (it.itemId == "LogoutButton"){
                         clientHomeViewModel.onEvent(ClienHomeUIEvent.LogoutButtonClicked)

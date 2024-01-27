@@ -19,7 +19,7 @@ sealed class Screen {
 
 object YogaTimeAppRouter {
 
-    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.ManagerHomeScreen)
+    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.ClientHomeScreen)
 
     fun navigateTo(destination : Screen){
         currentScreen.value = destination
