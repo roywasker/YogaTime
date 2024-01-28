@@ -8,7 +8,7 @@ sealed class Screen {
     object SignUpScreen : Screen()
     object LoginScreen : Screen()
     object ClientHomeScreen : Screen()
-    object ClientProflieScreen : Screen()
+    object ClientProfileScreen : Screen()
     object ManagerHomeScreen : Screen()
     object ManagerProfileScreen : Screen()
     object GalleryScreen : Screen()

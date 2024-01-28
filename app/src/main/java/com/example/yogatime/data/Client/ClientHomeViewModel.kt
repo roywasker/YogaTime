@@ -24,7 +24,7 @@ class ClientHomeViewModel :ViewModel() {
                 ToolBar.logout()
             }
             is  ClienHomeUIEvent.ProfileButtonClicked ->{
-                YogaTimeAppRouter.navigateTo(Screen.ClientProflieScreen)
+                YogaTimeAppRouter.navigateTo(Screen.ClientProfileScreen)
             }
         }
     }

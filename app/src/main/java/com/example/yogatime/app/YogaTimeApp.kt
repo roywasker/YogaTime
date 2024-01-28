@@ -35,7 +35,7 @@ fun YogaTimeApp(){
                 is Screen.ClientHomeScreen ->{
                     ClientHomeScreen()
                 }
-                is Screen.ClientProflieScreen ->{
+                is Screen.ClientProfileScreen ->{
                     ClientProfileScreen()
                 }
                 is Screen.ManagerHomeScreen ->{
