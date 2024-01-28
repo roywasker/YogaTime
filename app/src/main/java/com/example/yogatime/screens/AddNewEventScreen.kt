@@ -57,7 +57,7 @@ fun AddNewEventScreen(addEventViewModel: AddEventScreenViewModel = viewModel()) 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
-            AppToolbar(toolbarTitle = stringResource(R.string.home),
+            AppToolbar(toolbarTitle = stringResource(R.string.train),
                 navigationIconClicked = {
                     coroutineScope.launch {
                         scaffoldState.drawerState.open()

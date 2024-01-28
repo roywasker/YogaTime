@@ -44,7 +44,7 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
-            AppToolbar(toolbarTitle = stringResource(R.string.home),
+            AppToolbar(toolbarTitle = stringResource(R.string.gallery),
                 navigationIconClicked = {
                     coroutineScope.launch {
                         scaffoldState.drawerState.open()
