@@ -35,7 +35,7 @@ fun ManagerProfileScreen(managerProfileViewModel: ManagerProfileViewModel = view
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
-            AppToolbar(toolbarTitle = stringResource(R.string.home),
+            AppToolbar(toolbarTitle = stringResource(R.string.profile),
                 navigationIconClicked = {
                     coroutineScope.launch {
                         scaffoldState.drawerState.open()
