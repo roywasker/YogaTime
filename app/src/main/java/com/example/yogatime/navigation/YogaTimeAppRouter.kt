@@ -13,6 +13,7 @@ sealed class Screen {
     object ManagerProfileScreen : Screen()
     object GalleryScreen : Screen()
     object AddNewEventScreen : Screen()
+    object EditUserDataScreen : Screen()
 
 }
 

@@ -1,23 +1,10 @@
 package com.example.yogatime.data.Client
 
-import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AssignmentInd
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.yogatime.data.ToolBar
-import com.example.yogatime.data.rules.NavigationItem
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -25,7 +12,6 @@ class ClientProfileViewModel : ViewModel() {
 
     var clientRatingUiState = mutableStateOf(ClientProfileUIState())
     val ratePopupMessage = mutableStateOf<String?>(null)
-
     fun onEvent(event: ClientProfileUIEvent) {
         when (event) {
             is ClientProfileUIEvent.LogoutButtonClicked -> {
@@ -63,6 +49,9 @@ class ClientProfileViewModel : ViewModel() {
                     }
                 }
                 addRating()
+            }
+            is ClientProfileUIEvent.EditButtonClicked ->{
+                YogaTimeAppRouter.navigateTo(Screen.EditUserDataScreen)
             }
         }
     }

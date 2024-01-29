@@ -8,4 +8,6 @@ sealed class ClientProfileUIEvent {
     object HomeButtonClicked : ClientProfileUIEvent()
 
     object RatingButtonClicked : ClientProfileUIEvent()
+
+    object EditButtonClicked : ClientProfileUIEvent()
 }

@@ -15,6 +15,7 @@ import com.example.yogatime.screens.LoginScreen
 import com.example.yogatime.screens.SighUpScreen
 import com.example.yogatime.screens.ClientHomeScreen
 import com.example.yogatime.screens.ClientProfileScreen
+import com.example.yogatime.screens.EditUserDataScreen
 import com.example.yogatime.screens.ManagerHomeScreen
 import com.example.yogatime.screens.ManagerProfileScreen
 
@@ -50,6 +51,9 @@ fun YogaTimeApp(){
                                 }
                 is Screen.AddNewEventScreen ->{
                     AddNewEventScreen()
+                }
+                is Screen.EditUserDataScreen ->{
+                    EditUserDataScreen()
                 }
             }
         }

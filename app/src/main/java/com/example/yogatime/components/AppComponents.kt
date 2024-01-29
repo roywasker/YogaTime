@@ -69,9 +69,6 @@ import com.example.yogatime.ui.theme.Secondary
 import com.example.yogatime.ui.theme.WhiteColor
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
-
-
-
 import android.app.DatePickerDialog
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -79,6 +76,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -87,25 +85,19 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.liveData
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import java.util.*
-
 import coil.compose.AsyncImage
-import com.example.yogatime.data.Client.ClienHomeUIEvent
-import com.example.yogatime.data.Client.ClientHomeUIState
-import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.Client.ClientProfileUIState
+import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GallertUIStateForDisplay
 
 
@@ -832,7 +824,9 @@ fun HorizontalRecyclerView(imageList: List<GallertUIStateForDisplay>) {
 @Composable
 fun ImageToDisplay(imageData: GallertUIStateForDisplay) {
     Card(
-        modifier = Modifier.padding(8.dp).width(200.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
             .height(120.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(Color.White)
@@ -840,7 +834,9 @@ fun ImageToDisplay(imageData: GallertUIStateForDisplay) {
         AsyncImage(
             model = imageData.url,
             contentDescription = imageData.name,
-            modifier = Modifier.width(200.dp).height(120.dp)
+            modifier = Modifier
+                .width(200.dp)
+                .height(120.dp)
         )
     }
 }
@@ -905,7 +901,7 @@ fun ReviewTextField(labelValue: String, onTextSelected: (String) -> Unit) {
 }
 
 @Composable
-fun ButtonRatingComponent(value:String, onButtonClicked : () -> Unit){
+fun SmallButtonComponent(value:String, onButtonClicked : () -> Unit, isEnabled: Boolean = true){
     Button(onClick = {
         onButtonClicked.invoke()
     },
@@ -913,7 +909,8 @@ fun ButtonRatingComponent(value:String, onButtonClicked : () -> Unit){
             .width(120.dp)
             .heightIn(40.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        enabled = isEnabled
     ) {
         Box(modifier = Modifier
             .width(120.dp)
@@ -961,4 +958,36 @@ fun RateToDisplay(rateData: ClientProfileUIState) {
         }
         Text(text = rateData.review)
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplayUserData(value : String,
+                    label :String,
+                    onTextSelected: (String) -> Unit,
+                    errorStatus: Boolean){
+    val textValue = remember {
+        mutableStateOf(value)
+    }
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small),
+        label = { Text(text = label)},
+        value = textValue.value,
+        textStyle = TextStyle(fontSize = 16.sp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Primary,
+            focusedLabelColor = Primary,
+            cursorColor = Primary,
+            ),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        singleLine = true,
+        maxLines = 1,
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
+        isError = !errorStatus
+    )
 }

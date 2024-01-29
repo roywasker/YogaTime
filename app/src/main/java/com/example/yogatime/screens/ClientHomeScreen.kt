@@ -81,7 +81,7 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
                 Spacer(modifier = Modifier.height(50.dp))
                 NormalTextToLeftCornerComponent(value = "Our rate : ")
                 Spacer(modifier = Modifier.height(5.dp))
-                NormalTextToLeftCornerComponent(value = "Avg rate : ${clientHomeViewModel.avgRate.doubleValue}")
+                NormalTextToLeftCornerComponent(value = "Avg rate : ${String.format("%.2f", clientHomeViewModel.avgRate.doubleValue)}")
                 Spacer(modifier = Modifier.height(5.dp))
                 HorizontalRecyclerViewForRate(rateList = clientHomeViewModel.rateList)
             }

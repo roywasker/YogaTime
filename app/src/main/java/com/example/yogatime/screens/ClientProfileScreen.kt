@@ -18,7 +18,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
-import com.example.yogatime.components.ButtonRatingComponent
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
@@ -37,6 +36,7 @@ import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.components.NormalTextToLeftCornerComponent
 import com.example.yogatime.components.RatingBar
 import com.example.yogatime.components.ReviewTextField
+import com.example.yogatime.components.SmallButtonComponent
 import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.Client.ClientProfileViewModel
 import com.example.yogatime.data.ToolBar
@@ -83,6 +83,11 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                 HeadingTextComponent(value = "Hey , ${ToolBar.fullNameId.value}")
                 NormalTextComponent(value = "Email : ${ToolBar.emailId.value}")
                 NormalTextComponent(value = "Phone : ${ToolBar.phoneId.value}")
+                Spacer(modifier = Modifier.height(20.dp))
+                SmallButtonComponent(value = "Edit",
+                    onButtonClicked = {
+                        clientProfileViewModel.onEvent(ClientProfileUIEvent.EditButtonClicked)
+                    })
 
                 Spacer(modifier = Modifier.height(40.dp))
 
@@ -108,7 +113,7 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                         })
 
                     Spacer(modifier = Modifier.height(10.dp))
-                    ButtonRatingComponent(value = "Send",
+                    SmallButtonComponent(value = "Send",
                         onButtonClicked = {
                             clientProfileViewModel.onEvent(ClientProfileUIEvent.RatingButtonClicked)
                         })
