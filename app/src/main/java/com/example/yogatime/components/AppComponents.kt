@@ -1,7 +1,6 @@
 package com.example.yogatime.components
 
 import android.util.Log
-import android.widget.Button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -53,14 +51,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -72,6 +67,8 @@ import com.example.yogatime.data.rules.NavigationItem
 import com.example.yogatime.ui.theme.AccentColor
 import com.example.yogatime.ui.theme.Secondary
 import com.example.yogatime.ui.theme.WhiteColor
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarOutline
 
 
 
@@ -86,44 +83,30 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.TextField
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.geometry.Size
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.liveData
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import java.util.*
 
 import coil.compose.AsyncImage
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
-
-
+import com.example.yogatime.data.Client.ClienHomeUIEvent
+import com.example.yogatime.data.Client.ClientHomeUIState
+import com.example.yogatime.data.Client.ClientProfileUIEvent
+import com.example.yogatime.data.Client.ClientProfileUIState
+import com.example.yogatime.data.gallery.GallertUIStateForDisplay
 
 
 @Composable
@@ -140,6 +123,23 @@ fun NormalTextComponent(value:String){
         )
         , color = TextColor,
         textAlign = TextAlign.Center
+    )
+}
+
+@Composable
+fun NormalTextToLeftCornerComponent(value:String){
+    Text(
+        text = value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 24.dp),
+        style = TextStyle(
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        )
+        , color = TextColor,
+        textAlign = TextAlign.Left
     )
 }
 
@@ -213,7 +213,7 @@ fun MyPhoneField(labelValue: String, painterResource: Painter,
             .clip(componentShapes.small),
         label = { Text(text = labelValue)},
         value = textValue.value,
-        textStyle = TextStyle(fontSize = 18.sp),
+        textStyle = TextStyle(fontSize = 16.sp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Primary,
             focusedLabelColor = Primary,
@@ -748,7 +748,8 @@ fun NavigationItemRow(item: NavigationItem,
             .fillMaxWidth()
             .clickable {
                 onNavigationItemClicked.invoke(item)
-            }.padding(all = 16.dp)
+            }
+            .padding(all = 16.dp)
     ) {
 
         Icon(
@@ -772,6 +773,7 @@ fun NavigationDrawerText(title: String, textUnit: TextUnit,color: Color) {
         )
     )
 }
+
 /*fun dropDownMenu() {
 
     var expanded by remember { mutableStateOf(false) }
@@ -811,3 +813,150 @@ fun NavigationDrawerText(title: String, textUnit: TextUnit,color: Color) {
         }
     }
 }*/
+
+@Composable
+fun HorizontalRecyclerView(imageList: List<GallertUIStateForDisplay>) {
+    /*LazyRow  {
+        items(imageList) { GallertUIStateForDisplay ->
+            ImageToDisplay(GallertUIStateForDisplay)
+        }
+    }*/
+
+    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for (image in imageList){
+            ImageToDisplay(image)
+        }
+    }
+}
+
+@Composable
+fun ImageToDisplay(imageData: GallertUIStateForDisplay) {
+    Card(
+        modifier = Modifier.padding(8.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        AsyncImage(
+            model = imageData.url,
+            contentDescription = imageData.name,
+            modifier = Modifier.width(120.dp)
+        )
+    }
+}
+
+
+@Composable
+fun RatingBar(
+    modifier: Modifier = Modifier,
+    rating: Int = 5,
+    stars: Int = 5,
+    onRatingChanged: (Double) -> Unit,
+    starsColor: Color = Primary
+) {
+
+    Row {
+        for (index in 1..stars) {
+            Icon(
+                imageVector =
+                if (index <= rating) {
+                    Icons.Rounded.Star
+                } else {
+                    Icons.Rounded.StarOutline
+                },
+                contentDescription = null,
+                tint = starsColor,
+                modifier = modifier
+                    .clickable { onRatingChanged(index.toDouble()) }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReviewTextField(labelValue: String, onTextSelected: (String) -> Unit) {
+    val textValue = remember {
+        mutableStateOf("")
+    }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .clip(componentShapes.small),
+        label = { Text(text = labelValue)},
+        value = textValue.value,
+        textStyle = TextStyle(fontSize = 18.sp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Primary,
+            focusedLabelColor = Primary,
+            cursorColor = Primary,
+
+            ),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        singleLine = false,
+        maxLines = 4,
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
+    )
+}
+
+@Composable
+fun ButtonRatingComponent(value:String, onButtonClicked : () -> Unit){
+    Button(onClick = {
+        onButtonClicked.invoke()
+    },
+        modifier = Modifier
+            .width(120.dp)
+            .heightIn(40.dp),
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent)
+    ) {
+        Box(modifier = Modifier
+            .width(120.dp)
+            .heightIn(40.dp)
+            .background(
+                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                shape = RoundedCornerShape(50.dp)
+            ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = value,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+@Composable
+fun HorizontalRecyclerViewForRate(rateList: List<ClientProfileUIState>) {
+    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for (rate in rateList){
+            RateToDisplay(rate)
+        }
+    }
+}
+
+@Composable
+fun RateToDisplay(rateData: ClientProfileUIState) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
+            .height(120.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White)
+    ) {
+        Row {
+            for (index in 1..rateData.rating.toInt()) {
+                Icon(
+                    imageVector = Icons.Rounded.Star,
+                    contentDescription = null,
+                    tint = Primary,
+                )
+            }
+        }
+        Text(text = rateData.review)
+    }
+}
