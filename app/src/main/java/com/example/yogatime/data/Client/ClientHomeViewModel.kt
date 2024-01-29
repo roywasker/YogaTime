@@ -80,13 +80,13 @@ class ClientHomeViewModel :ViewModel() {
                 }
                 rateList.clear()
                 rateList.addAll(newRateList)
+                calAvg()
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e(TAG, "Error fetching data: ${error.message}")
             }
         })
-        calAvg()
     }
 
     private fun calAvg() {
@@ -97,7 +97,6 @@ class ClientHomeViewModel :ViewModel() {
             sumRate += rate.rating.toInt()
         }
         avgRate.doubleValue = sumRate.toDouble()/count
-        Log.e(TAG, "Work")
     }
 
 }

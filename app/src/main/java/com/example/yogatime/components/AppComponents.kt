@@ -832,13 +832,15 @@ fun HorizontalRecyclerView(imageList: List<GallertUIStateForDisplay>) {
 @Composable
 fun ImageToDisplay(imageData: GallertUIStateForDisplay) {
     Card(
-        modifier = Modifier.padding(8.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        modifier = Modifier.padding(8.dp).width(200.dp)
+            .height(120.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White)
     ) {
         AsyncImage(
             model = imageData.url,
             contentDescription = imageData.name,
-            modifier = Modifier.width(120.dp)
+            modifier = Modifier.width(200.dp).height(120.dp)
         )
     }
 }

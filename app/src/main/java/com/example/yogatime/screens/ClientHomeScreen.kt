@@ -75,12 +75,13 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
                 HeadingTextComponent(value = "Home page")
                 Spacer(modifier = Modifier.height(40.dp))
 
-                /*NormalTextToLeftCornerComponent(value = "Our Gallery : ")
-                HorizontalRecyclerView(imageList = clientHomeViewModel.imageList)*/
-                
+                NormalTextToLeftCornerComponent(value = "Our Gallery : ")
+                HorizontalRecyclerView(imageList = clientHomeViewModel.imageList)
+
+                Spacer(modifier = Modifier.height(50.dp))
                 NormalTextToLeftCornerComponent(value = "Our rate : ")
                 Spacer(modifier = Modifier.height(5.dp))
-                NormalTextToLeftCornerComponent(value = "Avg rate : ${clientHomeViewModel.avgRate.value}")
+                NormalTextToLeftCornerComponent(value = "Avg rate : ${clientHomeViewModel.avgRate.doubleValue}")
                 Spacer(modifier = Modifier.height(5.dp))
                 HorizontalRecyclerViewForRate(rateList = clientHomeViewModel.rateList)
             }
