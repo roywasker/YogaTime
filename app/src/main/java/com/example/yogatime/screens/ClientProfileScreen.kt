@@ -1,6 +1,7 @@
 package com.example.yogatime.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -79,7 +81,9 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                 .background(Color.White)
                 .padding(paddingValues)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 HeadingTextComponent(value = "Hey , ${ToolBar.fullNameId.value}")
                 NormalTextComponent(value = "Email : ${ToolBar.emailId.value}")
                 NormalTextComponent(value = "Phone : ${ToolBar.phoneId.value}")

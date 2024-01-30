@@ -1,6 +1,7 @@
 package com.example.yogatime.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -79,7 +81,10 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
                 .background(Color.White)
                 .padding(paddingValues).padding(18.dp)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
                 ToolBar.fullNameId.value?.let { DisplayUserData(value = it, label = stringResource(id = R.string.name),
                     onTextSelected ={
                         editUserViewModel.onEvent(EditUserUIEvent.fullNameChanged(it))
@@ -102,7 +107,7 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
 
                 SmallButtonComponent(value = "Save",
                     onButtonClicked = {
-
+                        editUserViewModel.onEvent(EditUserUIEvent.EditButtonClicked)
                     },
                     isEnabled = editUserViewModel.allValidationsPassed.value)
             }
