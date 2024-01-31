@@ -83,6 +83,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -96,6 +97,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarToday
@@ -103,6 +105,8 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -120,6 +124,15 @@ import coil.compose.AsyncImage
 import com.example.yogatime.data.Client.ClientProfileUIState
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GallertUIStateForDisplay
+import com.example.yogatime.data.AddEvent.AddNewEventState
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+
+
 
 
 @Composable
@@ -1273,4 +1286,35 @@ fun NumberOfParticipante(
         isError = !errorStatus
     )
 }
+@Composable
+fun HorizontalRecyclerViewForTrain(TrainList: List<AddNewEventState>) {
+    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for (train in TrainList){
+            TrainToDisplay(train)
+        }
+    }
+}
+
+
+@Composable
+fun TrainToDisplay(trainData: AddNewEventState) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
+            .height(120.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White)
+    ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(text = "Train details")
+            Text(text = trainData.EventName)
+            Text(text =trainData.EventDate)
+            Text(text =trainData.EventTime)
+        }
+
+
+    }
+}
+
 
