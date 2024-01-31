@@ -13,13 +13,14 @@ sealed class Screen {
     object ManagerProfileScreen : Screen()
     object GalleryScreen : Screen()
     object AddNewEventScreen : Screen()
+    object EditUserDataScreen : Screen()
 
 }
 
 
 object YogaTimeAppRouter {
 
-    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.ClientHomeScreen)
+    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.LoginScreen)
 
     fun navigateTo(destination : Screen){
         currentScreen.value = destination

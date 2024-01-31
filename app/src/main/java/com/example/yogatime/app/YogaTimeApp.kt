@@ -6,6 +6,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.yogatime.data.gallery.GallertUIStateForDisplay
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import com.example.yogatime.screens.AddNewEventScreen
@@ -14,6 +15,7 @@ import com.example.yogatime.screens.LoginScreen
 import com.example.yogatime.screens.SighUpScreen
 import com.example.yogatime.screens.ClientHomeScreen
 import com.example.yogatime.screens.ClientProfileScreen
+import com.example.yogatime.screens.EditUserDataScreen
 import com.example.yogatime.screens.ManagerHomeScreen
 import com.example.yogatime.screens.ManagerProfileScreen
 
@@ -49,6 +51,9 @@ fun YogaTimeApp(){
                                 }
                 is Screen.AddNewEventScreen ->{
                     AddNewEventScreen()
+                }
+                is Screen.EditUserDataScreen ->{
+                    EditUserDataScreen()
                 }
             }
         }

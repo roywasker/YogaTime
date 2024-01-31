@@ -54,7 +54,6 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun login() {
-
         val email = loginUiState.value.email
         val password = loginUiState.value.password
 
@@ -74,9 +73,9 @@ class LoginViewModel : ViewModel() {
                             if (dataSnapshot.exists()) {
                                 isCoach = dataSnapshot.child("isCoach").value as Boolean
                                 if (isCoach){
-                                    YogaTimeAppRouter.navigateTo(Screen.ClientHomeScreen)
-                                }else{
                                     YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
+                                }else{
+                                    YogaTimeAppRouter.navigateTo(Screen.ClientHomeScreen)
                                 }
                             }
                         }
