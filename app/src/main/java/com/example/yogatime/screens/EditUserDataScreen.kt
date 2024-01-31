@@ -35,7 +35,6 @@ import com.example.yogatime.components.SmallButtonComponent
 import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.EditUser.EditUserUIEvent
 import com.example.yogatime.data.EditUser.EditUserViewModel
-import com.example.yogatime.data.Manager.AddEventUIEvent
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.sighup.SignupUIEvent
 import kotlinx.coroutines.launch
