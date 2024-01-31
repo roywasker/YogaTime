@@ -124,14 +124,10 @@ class EditUserViewModel: ViewModel() {
             var is_Coach = false
             usersReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val userOldData = dataSnapshot.getValue(RegistrationUiState::class.java)
-                    if (userOldData != null) {
-                        Log.d(TAG, "Inside edit user")
-                        is_Coach = when(userOldData.isCoach){
-                            false -> { false }
-                            true -> { true }
-                        }
-                        Log.d(TAG, "Inside edit user ==== $userOldData")
+                    val userIsCoach =  dataSnapshot.child("isCoach").value as Boolean
+                    is_Coach = when(userIsCoach){
+                        false -> { false }
+                        true -> { true }
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
