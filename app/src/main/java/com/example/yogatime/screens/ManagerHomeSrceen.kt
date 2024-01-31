@@ -25,6 +25,8 @@ import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import kotlinx.coroutines.launch
 import androidx.compose.material.Surface
+import com.example.yogatime.components.HorizontalRecyclerViewForTrain
+import com.example.yogatime.data.AddEvent.AddNewEventScreenViewModel
 import com.example.yogatime.data.ToolBar
 
 
@@ -32,6 +34,8 @@ import com.example.yogatime.data.ToolBar
 fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel()) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
+    managerHomeViewModel.getTrains()
+
 
     ToolBar.getUserData()
     Scaffold(
@@ -77,6 +81,13 @@ fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel())
                 }) {
                     Text("Go to Gallery")
                 }
+
+                HeadingTextComponent(value = "elor part")
+
+               HorizontalRecyclerViewForTrain(managerHomeViewModel.trainList)
+
+
+
             }
         }
     }

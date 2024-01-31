@@ -70,17 +70,20 @@ import com.example.yogatime.ui.theme.WhiteColor
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.DatePicker
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -90,6 +93,28 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.TextField
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -99,6 +124,15 @@ import coil.compose.AsyncImage
 import com.example.yogatime.data.Client.ClientProfileUIState
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GallertUIStateForDisplay
+import com.example.yogatime.data.AddEvent.AddNewEventState
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+
+
 
 
 @Composable
@@ -188,6 +222,38 @@ fun MyTextField(labelValue: String, painterResource: Painter,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddEventTextField(labelValue: String,
+                onTextSelected: (String) -> Unit,
+                errorStatus:Boolean = false) {
+    val textValue = remember {
+        mutableStateOf("")
+    }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small),
+        label = { Text(text = labelValue)},
+        value = textValue.value,
+        textStyle = TextStyle(fontSize = 18.sp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Primary,
+            focusedLabelColor = Primary,
+            cursorColor = Primary,
+
+            ),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        singleLine = true,
+        maxLines = 1,
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
+        isError = !errorStatus
+    )
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -514,6 +580,7 @@ fun DateFromTodayCompose(
     }, modifier = modifier) {
         Text(if (selectedDate.isEmpty()) "Select Date" else selectedDate)
     }
+
 }
 
 
@@ -766,6 +833,49 @@ fun NavigationDrawerText(title: String, textUnit: TextUnit,color: Color) {
     )
 }
 
+
+
+
+
+
+@Composable
+fun showDatePicker(){
+
+    val year: Int
+    val month: Int
+    val day: Int
+
+    val calendar = Calendar.getInstance()
+    val context = LocalContext.current
+    year = calendar.get(Calendar.YEAR)
+    month = calendar.get(Calendar.MONTH)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+    calendar.time = Date()
+
+    val date = remember { mutableStateOf("") }
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+            date.value = "$dayOfMonth/$month/$year"
+        }, year, month, day
+    )
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(text = "Selected Date: ${date.value}")
+        Spacer(modifier = Modifier.size(16.dp))
+        Button(onClick = {
+            datePickerDialog.show()
+        }) {
+            Text(text = "Open Date Picker")
+        }
+    }
+
+}
 /*fun dropDownMenu() {
 
     var expanded by remember { mutableStateOf(false) }
@@ -867,6 +977,103 @@ fun RatingBar(
             )
         }
     }
+}
+
+
+@Composable
+fun DateFromToday(
+    modifier: androidx.compose.ui.Modifier = androidx.compose.ui.Modifier
+) {
+    val context = LocalContext.current
+    var selectedDate by remember { mutableStateOf("") }
+    val calendar = Calendar.getInstance()
+
+    // Prepare the listener for date set
+    val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        // Note: month is 0 based
+        selectedDate = "$dayOfMonth/${month + 1}/$year"
+        // Use the selected date as needed
+        Toast.makeText(context, "Selected date: $selectedDate", Toast.LENGTH_LONG).show()
+    }
+
+    // Function to show the date picker dialog
+    val showDatePicker = {
+        DatePickerDialog(
+            context,
+            dateSetListener,
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            datePicker.minDate = System.currentTimeMillis() - 1000 // Restrict to today or future
+            show()
+        }
+    }
+
+    // OutlinedTextField to display the selected date
+    OutlinedTextField(
+        value = selectedDate,
+        onValueChange = { selectedDate = it },
+        label = { Text("Date") },
+        readOnly = true, // Make the text field read-only
+        modifier = modifier
+            .clickable { showDatePicker() }, // Open date picker on text field click
+        trailingIcon = {
+            IconButton(onClick = { showDatePicker() }) {
+                Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
+            }
+        }
+    )
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PickDateFromToday(
+    labelValue: String,
+    onDateSelected: (String) -> Unit,
+    errorStatus: Boolean = false
+) {
+    val context = LocalContext.current
+    var selectedDate by remember { mutableStateOf("") }
+    val calendar = Calendar.getInstance()
+
+    // Prepare the listener for date set
+    val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        // Note: month is 0 based
+        selectedDate = "$dayOfMonth/${month + 1}/$year"
+        onDateSelected(selectedDate) // Pass the selected date back
+    }
+
+    // Function to show the date picker dialog
+    val showDatePicker = {
+        DatePickerDialog(
+            context,
+            dateSetListener,
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            datePicker.minDate = System.currentTimeMillis() - 1000 // Restrict to today or future
+            show()
+        }
+    }
+    // OutlinedTextField to display the selected date
+    OutlinedTextField(
+        value = selectedDate,
+        onValueChange = { selectedDate = it },
+        label = { Text(labelValue) },
+        readOnly = true, // Make the text field read-only
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small)
+            .clickable(onClick = { showDatePicker() }), // Open date picker on text field click // Open date picker on text field click
+        trailingIcon = {
+            IconButton(onClick = { showDatePicker() }) {
+                Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
+            }
+        },isError = !errorStatus,
+        singleLine = true,
+        maxLines = 1
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -991,3 +1198,123 @@ fun DisplayUserData(value : String,
         isError = !errorStatus
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PickTime(
+    labelValue: String,
+    onTimeSelected: (String) -> Unit,
+    errorStatus: Boolean = false
+) {
+    val context = LocalContext.current
+    var selectedTime by remember { mutableStateOf("") }
+    val calendar = Calendar.getInstance()
+
+    // Prepare the listener for time set
+    val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+        // Format the time in a preferred format, e.g., 24-hour format here
+        selectedTime = String.format("%02d:%02d", hourOfDay, minute)
+        onTimeSelected(selectedTime) // Pass the selected time back
+    }
+
+    // Function to show the time picker dialog
+    val showTimePicker = {
+        TimePickerDialog(
+            context,
+            timeSetListener,
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true // for 24-hour time format, set to false for 12-hour format with AM/PM
+        ).show()
+    }
+
+    // OutlinedTextField to display the selected time
+    OutlinedTextField(
+        value = selectedTime,
+        onValueChange = { selectedTime = it },
+        label = { Text(labelValue) },
+        readOnly = true, // Make the text field read-only
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small)
+            .clickable(onClick = { showTimePicker() }),
+        trailingIcon = {
+            IconButton(onClick = { showTimePicker() }) {
+                Icon(Icons.Default.AccessTime, contentDescription = "Select Time")
+            }
+        },
+        isError = !errorStatus,
+        singleLine = true,
+        maxLines = 1
+    )
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NumberOfParticipante(
+    labelValue: String,
+    painterResource: Painter,
+    onTextSelected: (String) -> Unit,
+    errorStatus: Boolean = false
+) {
+    val textValue = remember { mutableStateOf("") }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small),
+        value = textValue.value,
+        textStyle = TextStyle(fontSize = 18.sp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Primary,
+            focusedLabelColor = Primary,
+            cursorColor = Primary
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Next
+        ),
+        label = { Text(text = labelValue) },
+        singleLine = true,
+        maxLines = 1,
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
+        trailingIcon = { // Moved the icon to trailingIcon
+            Icon(painter = painterResource, contentDescription = null)
+        },
+        isError = !errorStatus
+    )
+}
+@Composable
+fun HorizontalRecyclerViewForTrain(TrainList: List<AddNewEventState>) {
+    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for (train in TrainList){
+            TrainToDisplay(train)
+        }
+    }
+}
+
+
+@Composable
+fun TrainToDisplay(trainData: AddNewEventState) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
+            .height(120.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White)
+    ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(text = "Train details")
+            Text(text = trainData.EventName)
+            Text(text =trainData.EventDate)
+            Text(text =trainData.EventTime)
+        }
+
+
+    }
+}
+
+
