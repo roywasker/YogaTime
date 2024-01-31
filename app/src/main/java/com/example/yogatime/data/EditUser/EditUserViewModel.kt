@@ -65,12 +65,11 @@ class EditUserViewModel: ViewModel() {
                 ToolBar.logout()
             }
             is  EditUserUIEvent.ProfileButtonClicked ->{
-                YogaTimeAppRouter.navigateTo(Screen.ClientProfileScreen)
+                moveTo(1)
             }
             is  EditUserUIEvent.HomeButtonClicked ->{
-                YogaTimeAppRouter.navigateTo(Screen.ClientHomeScreen)
+                moveTo(2)
             }
-
         }
     }
 
@@ -124,11 +123,7 @@ class EditUserViewModel: ViewModel() {
             var is_Coach = false
             usersReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val userIsCoach =  dataSnapshot.child("isCoach").value as Boolean
-                    is_Coach = when(userIsCoach){
-                        false -> { false }
-                        true -> { true }
-                    }
+                    is_Coach =  dataSnapshot.child("isCoach").value as Boolean
                 }
                 override fun onCancelled(error: DatabaseError) {
                 }
@@ -143,5 +138,36 @@ class EditUserViewModel: ViewModel() {
 
                 }
         }
+    }
+    fun moveTo(toPage:Int){
+        val user = FirebaseAuth.getInstance().currentUser
+        var is_Coach = false
+        user?.let {
+            val uid = it.uid
+            val database = FirebaseDatabase.getInstance()
+            val usersReference = database.reference.child("users").child(uid)
+            usersReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    is_Coach =  dataSnapshot.child("isCoach").value as Boolean
+                    Log.d(TAG, "move to $is_Coach")
+                    if(is_Coach){
+                        if (toPage == 1) {
+                            YogaTimeAppRouter.navigateTo(Screen.ManagerProfileScreen)
+                        }else{
+                            YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
+                        }
+                    }else{
+                        if (toPage == 1) {
+                            YogaTimeAppRouter.navigateTo(Screen.ClientProfileScreen)
+                        }else{
+                            YogaTimeAppRouter.navigateTo(Screen.ClientHomeScreen)
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        }
+
     }
 }
