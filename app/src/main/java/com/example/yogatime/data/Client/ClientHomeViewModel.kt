@@ -80,6 +80,7 @@ class ClientHomeViewModel :ViewModel() {
                 }
                 rateList.clear()
                 rateList.addAll(newRateList)
+                rateList.reverse()
                 calAvg()
             }
 

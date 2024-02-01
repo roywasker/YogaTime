@@ -16,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.yogatime.components.HeadingTextComponent
-import com.example.yogatime.components.PickImageFromGallery
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -72,7 +71,7 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .padding(paddingValues)
+                .padding(paddingValues).padding(18.dp)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 HeadingTextComponent(value = "Upload Image to Gallery")

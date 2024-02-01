@@ -1315,5 +1315,3 @@ fun TrainToDisplay(trainData: AddNewEventState) {
 
     }
 }
-
-

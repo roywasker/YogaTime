@@ -25,6 +25,7 @@ import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import kotlinx.coroutines.launch
 import androidx.compose.material.Surface
+import androidx.compose.ui.unit.dp
 import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.data.AddEvent.AddNewEventScreenViewModel
 import com.example.yogatime.data.ToolBar
@@ -66,7 +67,7 @@ fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel())
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .padding(paddingValues)
+                .padding(paddingValues).padding(18.dp)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 HeadingTextComponent(value = "Home page")

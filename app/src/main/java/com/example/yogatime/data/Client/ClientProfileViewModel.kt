@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -57,11 +58,17 @@ class ClientProfileViewModel : ViewModel() {
     }
 
     private fun addRating(){
+        val user = FirebaseAuth.getInstance().currentUser
+        var userEmail = ""
+        if (user != null){
+            userEmail = user.email.toString()
+        }
         val database = Firebase.database
         val reference = database.getReference("rate")
         val id = reference.push().key
         val newReference = id?.let { reference.child(it) }
         val rateMap = hashMapOf(
+            "userEmail" to userEmail,
             "rateInString" to clientRatingUiState.value.rateInString,
             "rate" to clientRatingUiState.value.rating,
             "review" to clientRatingUiState.value.review

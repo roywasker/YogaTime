@@ -32,15 +32,11 @@ import com.example.yogatime.data.AddEvent.AddNewEventScreenViewModel
 import com.example.yogatime.data.AddEvent.AddNewEvent_UIEvent
 
 import com.example.yogatime.data.ToolBar
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel()) {
-
-    val dateDialogState = rememberMaterialDialogState()
-    val timeDialogState = rememberMaterialDialogState()
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -76,7 +72,7 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .padding(paddingValues)
+                .padding(paddingValues).padding(18.dp)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 NormalTextComponent(value = "Event")

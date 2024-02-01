@@ -98,14 +98,6 @@ class GalleryScreenViewModel : ViewModel() {
     }
 
 
-
-
-
-
-
-
-
-
     // Function to upload image to Firebase Storage and then save its metadata to Firebase Realtime Database
     fun uploadImageToFirebaseStorage(imageStream: InputStream, fileName: String) {
         val user = FirebaseAuth.getInstance().currentUser
