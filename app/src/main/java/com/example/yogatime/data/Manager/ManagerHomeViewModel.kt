@@ -19,6 +19,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ManagerHomeViewModel :ViewModel() {
     var trainList = mutableStateListOf<AddNewEventState>()
@@ -40,7 +42,7 @@ class ManagerHomeViewModel :ViewModel() {
     fun getTrains() {
         val database = FirebaseDatabase.getInstance()
         val databaseRef = database.reference.child("AddNewEvent")
-
+        val currentDate = Date()
         databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val newTrainList = mutableListOf<AddNewEventState>()
@@ -49,33 +51,31 @@ class ManagerHomeViewModel :ViewModel() {
                     try {
                         val train = snapshot.getValue(AddNewEventState::class.java)
                         train?.let {
-                            newTrainList.add(it)
-                            Log.e(TAG, "Error parsing data: ${train.EventName}")
-
+                            if (train.NumberOfParticipants !="0") {
+                                val eventDate = parseDate(train.EventDate)
+                                if (eventDate >= currentDate) {
+                                    newTrainList.add(it)
+                                }
+                            }
                         }
                     } catch (e: Exception) {
-
                         Log.e(TAG, "Error parsing data: ${e.message}")
                     }
                 }
+                newTrainList.sortBy { parseDate(it.EventDate) }
                 trainList.clear()
                 trainList.addAll(newTrainList)
-                Log.e(TAG, "Error parsing data: ${trainList.size}")
-
-
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e(TAG, "Error fetching data: ${error.message}")
             }
         })
-
     }
 
-    fun getTrainsList(): List<AddNewEventState> {
-        return trainList
+    // Function to parse the date string
+    private fun parseDate(dateString: String): Date {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return dateFormat.parse(dateString) ?: Date(0)
     }
-
-
-
 }
