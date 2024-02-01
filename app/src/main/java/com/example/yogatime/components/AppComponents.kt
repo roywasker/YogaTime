@@ -78,12 +78,10 @@ import android.os.Build
 import android.provider.MediaStore
 import android.widget.DatePicker
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -92,27 +90,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.TextField
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.asImageBitmap
@@ -121,17 +100,8 @@ import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import java.util.*
 import coil.compose.AsyncImage
 import com.example.yogatime.data.Client.ClientProfileUIState
-import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GallertUIStateForDisplay
 import com.example.yogatime.data.AddEvent.AddNewEventState
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
-
-
 
 
 @Composable
@@ -778,10 +748,6 @@ fun SinglePhotoPicker(){
                 Text("Upload")
             }
         }
-
-
-
-
     }
 }
 
@@ -1311,7 +1277,34 @@ fun TrainToDisplay(trainData: AddNewEventState) {
             Text(text =trainData.EventDate)
             Text(text =trainData.EventTime)
         }
+    }
+}
 
-
+@Composable
+fun HorizontalRecyclerViewForDelImage(imageList: List<GallertUIStateForDisplay>, onImageClick: (String) -> Unit) {
+    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for (image in imageList) {
+            ImageToDisplayForDelImage(image, onImageClick)
+        }
+    }
+}
+@Composable
+fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick: (String) -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
+            .height(120.dp)
+            .clickable { onImageClick(imageData.name) },  // Add click handling here
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White)
+    ) {
+        AsyncImage(
+            model = imageData.url,
+            contentDescription = imageData.name,
+            modifier = Modifier
+                .width(200.dp)
+                .height(120.dp)
+        )
     }
 }

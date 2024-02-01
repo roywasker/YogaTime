@@ -1,5 +1,4 @@
 package com.example.yogatime.screens
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -8,26 +7,26 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
+import com.example.yogatime.components.HorizontalRecyclerViewForDelImage
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
-import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.components.SinglePhotoPicker
-import com.example.yogatime.data.Client.ClientProfileUIEvent
+import com.example.yogatime.components.SmallButtonComponent
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GalleryUIEvent
 import kotlinx.coroutines.launch
@@ -40,6 +39,7 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
     val coroutineScope = rememberCoroutineScope()
 
     ToolBar.getUserData()
+    galleryScreenViewModel.getImage()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -71,12 +71,32 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .padding(paddingValues).padding(18.dp)
+                .padding(paddingValues)
+                .padding(18.dp)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                 HeadingTextComponent(value = "Upload Image to Gallery")
                 SinglePhotoPicker()
+
+                HeadingTextComponent(value = "Gallery")
+                HorizontalRecyclerViewForDelImage(imageList = galleryScreenViewModel.imageList,
+                    onImageClick ={
+                        galleryScreenViewModel.onEvent(GalleryUIEvent.delImageName(it))
+                    })
+                SmallButtonComponent(value = "Delete",
+                    onButtonClicked = {
+                        galleryScreenViewModel.onEvent(GalleryUIEvent.DelButtonClicked)
+                 })
             }
         }
+    }
+    if (galleryScreenViewModel.popupMessage.value != null) {
+        AlertDialog(
+            onDismissRequest = { galleryScreenViewModel.popupMessage.value = null },
+            text = { Text(galleryScreenViewModel.popupMessage.value!!) },
+            confirmButton = { TextButton(onClick = { galleryScreenViewModel.popupMessage.value = null }) { Text("OK") } }
+        )
     }
 }

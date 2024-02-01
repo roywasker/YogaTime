@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.AssignmentInd
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,7 +37,10 @@ import java.util.UUID
 class GalleryScreenViewModel : ViewModel() {
 
     private val _images = mutableStateListOf<String>()
-    val images: List<String> = _images
+    private var delImageName : String? = null
+    val imageList = mutableStateListOf<GallertUIStateForDisplay>()
+    val popupMessage = mutableStateOf<String?>(null)
+
 
     init {
         fetchImages()
@@ -167,8 +171,41 @@ class GalleryScreenViewModel : ViewModel() {
             is  GalleryUIEvent.HomeButtonClicked ->{
                 YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
             }
-
+            is GalleryUIEvent.delImageName ->{
+                delImageName = event.name
+            }
+            is GalleryUIEvent.DelButtonClicked ->{
+                dellImage()
+            }
             else -> {}
+        }
+    }
+
+    private fun dellImage() {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child("images/$delImageName")
+        storageRef.delete().addOnSuccessListener {
+            popupMessage.value = "delete image successfully"
+        }.addOnFailureListener{
+            popupMessage.value = "Failure delete image"
+        }
+    }
+
+    fun getImage() {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child("images")
+        imageList.clear()
+        storageRef.listAll().addOnSuccessListener { listResult ->
+            for (item in listResult.items) {
+                val image = GallertUIStateForDisplay("", "")
+                item.downloadUrl.addOnSuccessListener { uri ->
+                    if(!imageList.any { it.name == item.name}) {
+                        image.url = uri.toString()
+                        image.name = item.name
+                        imageList.add(image)
+                    }
+                }
+            }
         }
     }
 }

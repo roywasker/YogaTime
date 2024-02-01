@@ -38,6 +38,7 @@ class ClientHomeViewModel :ViewModel() {
     fun getImage() {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference.child("images")
+        imageList.clear()
         storageRef.listAll().addOnSuccessListener { listResult ->
             for (item in listResult.items) {
                 val image = GallertUIStateForDisplay("", "")

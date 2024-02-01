@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 class AddNewEventScreenViewModel : ViewModel(){
     var AddNewEventState = mutableStateOf(AddNewEventState())
     var allValidationsPassed = mutableStateOf(false)
+    val popupMessage = mutableStateOf<String?>(null)
 
     fun onEvent(event : AddNewEvent_UIEvent){
         when(event){
@@ -87,7 +88,7 @@ class AddNewEventScreenViewModel : ViewModel(){
             YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
 
         }.addOnFailureListener {
-            // Optionally handle failure, such as retry mechanisms
+            popupMessage.value = "Failure to add new train"
         }
     }
 

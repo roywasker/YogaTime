@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -105,5 +108,13 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
 
             }
         }
+    }
+    if (addEventViewModel.popupMessage.value != null) {
+        AlertDialog(
+            onDismissRequest = { addEventViewModel.popupMessage.value = null },
+            title = { Text("Error") },
+            text = { Text(addEventViewModel.popupMessage.value!!) },
+            confirmButton = { TextButton(onClick = { addEventViewModel.popupMessage.value = null }) { Text("OK") } }
+        )
     }
 }
