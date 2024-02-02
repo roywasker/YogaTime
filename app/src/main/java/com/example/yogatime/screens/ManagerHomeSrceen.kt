@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.material.Surface
 import androidx.compose.ui.unit.dp
 import com.example.yogatime.components.HorizontalRecyclerViewForTrain
+import com.example.yogatime.components.HorizontalRecyclerViewForTrainForManager
 import com.example.yogatime.data.AddEvent.AddNewEventScreenViewModel
 import com.example.yogatime.data.ToolBar
 
@@ -35,7 +36,7 @@ import com.example.yogatime.data.ToolBar
 fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel()) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
-    managerHomeViewModel.getTrains()
+   managerHomeViewModel.getTrains()
 
 
     ToolBar.getUserData()
@@ -83,12 +84,12 @@ fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel())
                     Text("Go to Gallery")
                 }
 
-                HeadingTextComponent(value = "elor part")
+                HeadingTextComponent(value = "My trains")
 
-               HorizontalRecyclerViewForTrain(managerHomeViewModel.trainList)
-
-
-
+                HorizontalRecyclerViewForTrainForManager(managerHomeViewModel.trainList,
+                    onImageClick = {
+                        managerHomeViewModel.onEvent(ManagerHomeUIEvent.cardClicked(it))
+                    })
             }
         }
     }

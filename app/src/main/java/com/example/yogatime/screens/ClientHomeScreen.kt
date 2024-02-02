@@ -22,9 +22,11 @@ import com.example.yogatime.components.AppToolbar
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.HorizontalRecyclerView
 import com.example.yogatime.components.HorizontalRecyclerViewForRate
+import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextToLeftCornerComponent
+import com.example.yogatime.components.SmallButtonComponent
 import com.example.yogatime.data.Client.ClienHomeUIEvent
 import com.example.yogatime.data.Client.ClientHomeViewModel
 import com.example.yogatime.data.ToolBar
@@ -40,6 +42,8 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
     ToolBar.getUserData()
     clientHomeViewModel.getImage()
     clientHomeViewModel.getRate()
+    clientHomeViewModel.getTrains()
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -75,6 +79,18 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
                 HeadingTextComponent(value = "Home page")
                 Spacer(modifier = Modifier.height(40.dp))
 
+                HeadingTextComponent(value = "Our train : ")
+
+                HorizontalRecyclerViewForTrain(clientHomeViewModel.trainList,
+                    onImageClick = {
+                        clientHomeViewModel.onEvent(ClienHomeUIEvent.trainId(it))
+                    })
+                SmallButtonComponent(value = "Register",
+                    onButtonClicked = {
+                        clientHomeViewModel.onEvent(ClienHomeUIEvent.regToTrainButtonClicked)
+                    })
+
+                Spacer(modifier = Modifier.height(20.dp))
                 NormalTextToLeftCornerComponent(value = "Our Gallery : ")
                 HorizontalRecyclerView(imageList = clientHomeViewModel.imageList)
 

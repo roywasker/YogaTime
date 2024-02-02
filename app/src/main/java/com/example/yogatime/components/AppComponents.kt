@@ -102,6 +102,8 @@ import coil.compose.AsyncImage
 import com.example.yogatime.data.Client.ClientProfileUIState
 import com.example.yogatime.data.gallery.GallertUIStateForDisplay
 import com.example.yogatime.data.AddEvent.AddNewEventState
+import com.example.yogatime.data.Client.RegToTrainState
+import com.example.yogatime.data.Manager.TrainUiState
 
 
 @Composable
@@ -1252,30 +1254,32 @@ fun NumberOfParticipante(
     )
 }
 @Composable
-fun HorizontalRecyclerViewForTrain(TrainList: List<AddNewEventState>) {
+fun HorizontalRecyclerViewForTrain(TrainList: List<RegToTrainState>,  onImageClick: (RegToTrainState) -> Unit) {
     Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
         for (train in TrainList){
-            TrainToDisplay(train)
+            TrainToDisplay(train, onImageClick)
         }
     }
 }
 
 
 @Composable
-fun TrainToDisplay(trainData: AddNewEventState) {
+fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(200.dp)
-            .height(120.dp),
+            .height(120.dp)
+            .clickable { onImageClick(trainData) },
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(Color.White)
+        colors = CardDefaults.cardColors(Color.White),
+
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = "Train details")
             Text(text = trainData.EventName)
-            Text(text =trainData.EventDate)
-            Text(text =trainData.EventTime)
+            Text(text = trainData.EventDate)
+            Text(text = trainData.EventTime)
         }
     }
 }
@@ -1306,5 +1310,51 @@ fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick:
                 .width(200.dp)
                 .height(120.dp)
         )
+    }
+}
+
+@Composable
+fun HorizontalRecyclerViewForTrainForManager(TrainList: List<TrainUiState>, onImageClick: (TrainUiState) -> Unit) {
+    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for (train in TrainList){
+            TrainToDisplayForManager(train, onImageClick)
+        }
+    }
+}
+
+
+@Composable
+fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiState) -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
+            .height(120.dp)
+            .clickable { onImageClick(trainData) },
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White),
+
+        ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(text = "Train details")
+            Text(text = trainData.EventName)
+            Text(text = trainData.EventDate)
+            Text(text = trainData.EventTime)
+            Text(text = trainData.NumberOfParticipants)
+        }
+    }
+}
+
+@Composable
+fun DisplayUserRegisterForTrain(trainData: TrainUiState){
+    val userList = trainData.userList
+    Column(modifier = Modifier.padding(8.dp)) {
+        if (userList != null) {
+            for (user in userList){
+                NormalTextToLeftCornerComponent(value = "${user.userEmail} : ${user.userName}")
+            }
+        }else{
+            NormalTextToLeftCornerComponent(value = "No user are register")
+        }
     }
 }

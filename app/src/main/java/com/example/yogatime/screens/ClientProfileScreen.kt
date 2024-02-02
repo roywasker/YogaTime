@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
 import com.example.yogatime.components.HeadingTextComponent
+import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextComponent
@@ -39,13 +40,15 @@ import com.example.yogatime.components.NormalTextToLeftCornerComponent
 import com.example.yogatime.components.RatingBar
 import com.example.yogatime.components.ReviewTextField
 import com.example.yogatime.components.SmallButtonComponent
+import com.example.yogatime.data.Client.ClienHomeUIEvent
+import com.example.yogatime.data.Client.ClientHomeViewModel
 import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.Client.ClientProfileViewModel
 import com.example.yogatime.data.ToolBar
 import kotlinx.coroutines.launch
 
 @Composable
-fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewModel()){
+fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewModel(), clientHomeViewModel: ClientHomeViewModel = viewModel()){
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     var rating by remember { mutableIntStateOf(4) }
@@ -91,6 +94,15 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                 SmallButtonComponent(value = "Edit",
                     onButtonClicked = {
                         clientProfileViewModel.onEvent(ClientProfileUIEvent.EditButtonClicked)
+                    })
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+
+                HeadingTextComponent(value = "My train :")
+
+                HorizontalRecyclerViewForTrain(clientHomeViewModel.trainListForUser,
+                    onImageClick = {
                     })
 
                 Spacer(modifier = Modifier.height(40.dp))
