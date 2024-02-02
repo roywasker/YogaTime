@@ -31,6 +31,8 @@ class ClientHomeViewModel :ViewModel() {
     var trainList = mutableStateListOf<RegToTrainState>()
     var trainListForUser = mutableStateListOf<RegToTrainState>()
     private var trainToReg : RegToTrainState? = null
+    val popupMessage = mutableStateOf<String?>(null)
+
     private val TAG = ClientHomeViewModel::class.simpleName
 
     fun onEvent(event : ClienHomeUIEvent) {
@@ -186,6 +188,7 @@ class ClientHomeViewModel :ViewModel() {
                         .addOnSuccessListener {
                             Log.d(TAG, "Inside add train ")
                             UpdateTrain()
+                            popupMessage.value = "You register to this train"
                         }
                 }
                 override fun onCancelled(error: DatabaseError) {

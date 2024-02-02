@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -102,6 +105,13 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
                 HorizontalRecyclerViewForRate(rateList = clientHomeViewModel.rateList)
             }
         }
+    }
+    if (clientHomeViewModel.popupMessage.value != null) {
+        AlertDialog(
+            onDismissRequest = { clientHomeViewModel.popupMessage.value = null },
+            text = { Text(clientHomeViewModel.popupMessage.value!!) },
+            confirmButton = { TextButton(onClick = { clientHomeViewModel.popupMessage.value = null }) { Text("OK") } }
+        )
     }
 }
 

@@ -96,8 +96,7 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                         clientProfileViewModel.onEvent(ClientProfileUIEvent.EditButtonClicked)
                     })
 
-                Spacer(modifier = Modifier.height(40.dp))
-
+                Spacer(modifier = Modifier.height(20.dp))
 
                 HeadingTextComponent(value = "My train :")
 
@@ -105,7 +104,7 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                     onImageClick = {
                     })
 
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Card(
                     modifier = Modifier.padding(8.dp),

@@ -69,10 +69,6 @@ fun TrainUserDisplayScreen(trainUserDisplayViewModel: TrainUserDisplayViewModel 
                 .padding(18.dp)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                NormalTextToLeftCornerComponent(value = "User register to this train ")
-
-                Spacer(modifier = Modifier.height(20.dp))
-
                 managerHomeViewModel.trainClick?.let { DisplayUserRegisterForTrain(it) }
             }
         }

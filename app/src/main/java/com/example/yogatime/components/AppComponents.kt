@@ -83,6 +83,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -92,6 +93,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.ripple.rememberRipple
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.asImageBitmap
@@ -1254,26 +1256,32 @@ fun NumberOfParticipante(
     )
 }
 @Composable
-fun HorizontalRecyclerViewForTrain(TrainList: List<RegToTrainState>,  onImageClick: (RegToTrainState) -> Unit) {
-    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
-        for (train in TrainList){
-            TrainToDisplay(train, onImageClick)
+fun HorizontalRecyclerViewForTrain(TrainList: List<RegToTrainState>, onImageClick: (RegToTrainState) -> Unit) {
+    var selectedCardIndex by remember { mutableStateOf(-1) }
+
+    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for ((index, train) in TrainList.withIndex()) {
+            TrainToDisplay(train, onImageClick, isSelected = index == selectedCardIndex) {
+                selectedCardIndex = index
+            }
         }
     }
 }
 
-
 @Composable
-fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -> Unit) {
+fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -> Unit, isSelected: Boolean, onCardClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(200.dp)
             .height(120.dp)
-            .clickable { onImageClick(trainData) },
+            .clickable {
+                onCardClick()
+                onImageClick(trainData)
+            }
+            .background(if (isSelected) Color.Gray else Color.White),
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(Color.White),
-
+        colors = CardDefaults.cardColors(Color.White)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = "Train details")
@@ -1284,22 +1292,33 @@ fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -
     }
 }
 
+
 @Composable
 fun HorizontalRecyclerViewForDelImage(imageList: List<GallertUIStateForDisplay>, onImageClick: (String) -> Unit) {
+    var selectedCardIndex by remember { mutableStateOf(-1) }
+
     Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-        for (image in imageList) {
+        /*for (image in imageList) {
             ImageToDisplayForDelImage(image, onImageClick)
+        }*/
+        for ((index, image) in imageList.withIndex()) {
+            ImageToDisplayForDelImage(image, onImageClick, isSelected = index == selectedCardIndex) {
+                selectedCardIndex = index
+            }
         }
     }
 }
 @Composable
-fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick: (String) -> Unit) {
+fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick: (String) -> Unit,isSelected: Boolean, onCardClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(200.dp)
             .height(120.dp)
-            .clickable { onImageClick(imageData.name) },  // Add click handling here
+            .clickable {
+                onCardClick()
+                onImageClick(imageData.name) }  // Add click handling here
+            .background(if (isSelected) Color.Gray else Color.White),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(Color.White)
     ) {
@@ -1315,22 +1334,32 @@ fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick:
 
 @Composable
 fun HorizontalRecyclerViewForTrainForManager(TrainList: List<TrainUiState>, onImageClick: (TrainUiState) -> Unit) {
+    var selectedCardIndex by remember { mutableStateOf(-1) }
+
     Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
-        for (train in TrainList){
+        /*for (train in TrainList){
             TrainToDisplayForManager(train, onImageClick)
+        }*/
+        for ((index, train) in TrainList.withIndex()) {
+            TrainToDisplayForManager(train, onImageClick, isSelected = index == selectedCardIndex) {
+                selectedCardIndex = index
+            }
         }
     }
 }
 
 
 @Composable
-fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiState) -> Unit) {
+fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiState) -> Unit,isSelected: Boolean, onCardClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(200.dp)
             .height(120.dp)
-            .clickable { onImageClick(trainData) },
+            .clickable {
+                onCardClick()
+                onImageClick(trainData) }
+            .background(if (isSelected) Color.Gray else Color.White),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(Color.White),
 
@@ -1349,12 +1378,19 @@ fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiStat
 fun DisplayUserRegisterForTrain(trainData: TrainUiState){
     val userList = trainData.userList
     Column(modifier = Modifier.padding(8.dp)) {
+        HeadingTextComponent(value = "Event name : ${trainData.EventName}")
+        Spacer(modifier = Modifier.height(20.dp))
+        HeadingTextComponent(value = "Event date : ${trainData.EventDate}")
+        Spacer(modifier = Modifier.height(20.dp))
+        HeadingTextComponent(value = "Event time : ${trainData.EventTime}")
+        Spacer(modifier = Modifier.height(20.dp))
+        HeadingTextComponent(value = "User register :")
+        Spacer(modifier = Modifier.height(20.dp))
         if (userList != null) {
             for (user in userList){
-                NormalTextToLeftCornerComponent(value = "${user.userEmail} : ${user.userName}")
+                NormalTextToLeftCornerComponent(value = "${user.userName}"
+                )
             }
-        }else{
-            NormalTextToLeftCornerComponent(value = "No user are register")
         }
     }
 }

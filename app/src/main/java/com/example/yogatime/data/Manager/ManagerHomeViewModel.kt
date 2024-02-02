@@ -63,12 +63,12 @@ class ManagerHomeViewModel :ViewModel() {
                                     }
                                     databaseRefToUserList?.addValueEventListener(object : ValueEventListener {
                                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                            val userData = mutableStateOf(userRegState())
                                             for (miniSnapshot in dataSnapshot.children) {
+                                                val userData = mutableStateOf(userRegState())
                                                 userData.value.userEmail = miniSnapshot.child("userEmail").value as String
                                                 userData.value.userName = miniSnapshot.child("userName").value as String
                                                 userList.add(userData.value)
-                                                Log.e(TAG, "user : ${userData.value}")
+                                                //Log.e(TAG, "user : ${userList}")
                                             }
                                         }
                                         override fun onCancelled(e: DatabaseError) {
