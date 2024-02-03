@@ -199,7 +199,7 @@ class ClientHomeViewModel :ViewModel() {
     private fun getTrainsForUser() {
         val user = FirebaseAuth.getInstance().currentUser
         val currentDate = Date()
-        user?.let {
+        user?.let { it ->
             val uid = it.uid
             val database = FirebaseDatabase.getInstance()
             val usersReference = database.reference.child("users").child(uid).child("trains")
@@ -223,6 +223,7 @@ class ClientHomeViewModel :ViewModel() {
                             Log.e(ContentValues.TAG, "Error parsing data: ${e.message}")
                         }
                     }
+                    newTrainList.sortBy { parseDate(it.EventDate) }
                     trainListForUser.clear()
                     trainListForUser.addAll(newTrainList)
                 }

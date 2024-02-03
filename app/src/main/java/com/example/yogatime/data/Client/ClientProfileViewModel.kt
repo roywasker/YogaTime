@@ -1,18 +1,29 @@
 package com.example.yogatime.data.Client
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.values
 import com.google.firebase.ktx.Firebase
+import java.util.Date
 
 class ClientProfileViewModel : ViewModel() {
 
     var clientRatingUiState = mutableStateOf(ClientProfileUIState())
-    val ratePopupMessage = mutableStateOf<String?>(null)
+    private var trainToDeleteReg : RegToTrainState? = null
+    val popupMessage = mutableStateOf<String?>(null)
+
+
     fun onEvent(event: ClientProfileUIEvent) {
         when (event) {
             is ClientProfileUIEvent.LogoutButtonClicked -> {
@@ -54,7 +65,57 @@ class ClientProfileViewModel : ViewModel() {
             is ClientProfileUIEvent.EditButtonClicked ->{
                 YogaTimeAppRouter.navigateTo(Screen.EditUserDataScreen)
             }
+            is ClientProfileUIEvent.unRegToTrainButtonClicked ->{
+                deleteTrain()
+            }
+            is ClientProfileUIEvent.trainToDelete ->{
+                trainToDeleteReg = event.trainToDelete
+            }
         }
+    }
+
+    private fun deleteTrain() {
+        if (trainToDeleteReg == null) {
+            popupMessage.value = "Please select training to cancel registration"
+            return
+        }
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            val uid = it.uid
+            val database = FirebaseDatabase.getInstance()
+            val trainReference =
+                trainToDeleteReg?.let { it1 ->
+                    database.reference.child("users").child(uid).child("trains").child(
+                        it1.trainId)
+                }
+            trainReference?.setValue(null)
+            val databaseRefToUser = trainToDeleteReg?.let { database.reference.child("AddNewEvent").child(it.trainId)
+                .child("userRegister").child(uid)}
+            databaseRefToUser?.setValue(null)?.addOnSuccessListener {
+                popupMessage.value="Train delete successfully"
+            }
+
+            updateTrainInDelete()
+        }
+    }
+
+    private fun updateTrainInDelete() {
+        val database = FirebaseDatabase.getInstance()
+        val databaseRef = trainToDeleteReg?.let { database.reference.child("AddNewEvent").child(it.trainId)}
+        databaseRef?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val newNumOfParticipants = dataSnapshot.child("NumberOfParticipants").value as String
+                var newNumOfParticipantsInt = newNumOfParticipants.toInt()
+                newNumOfParticipantsInt += 1
+                val trainMap = hashMapOf(
+                    "NumberOfParticipants" to newNumOfParticipantsInt.toString()
+                )
+                databaseRef.updateChildren(trainMap as Map<String, Any>).addOnSuccessListener {}
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error fetching data: ${error.message}")
+            }
+        })
     }
 
     private fun addRating(){
@@ -74,6 +135,6 @@ class ClientProfileViewModel : ViewModel() {
             "review" to clientRatingUiState.value.review
         )
         newReference?.setValue(rateMap)
-        ratePopupMessage.value = "Rating completed successfully"
+        popupMessage.value = "Rating completed successfully"
     }
 }

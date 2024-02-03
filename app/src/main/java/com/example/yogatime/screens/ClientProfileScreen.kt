@@ -90,21 +90,28 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                 HeadingTextComponent(value = "Hey , ${ToolBar.fullNameId.value}")
                 NormalTextComponent(value = "Email : ${ToolBar.emailId.value}")
                 NormalTextComponent(value = "Phone : ${ToolBar.phoneId.value}")
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 SmallButtonComponent(value = "Edit",
                     onButtonClicked = {
                         clientProfileViewModel.onEvent(ClientProfileUIEvent.EditButtonClicked)
                     })
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 HeadingTextComponent(value = "My train :")
 
                 HorizontalRecyclerViewForTrain(clientHomeViewModel.trainListForUser,
                     onImageClick = {
+                        clientProfileViewModel.onEvent(ClientProfileUIEvent.trainToDelete(it))
                     })
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+                SmallButtonComponent(value = "Delete",
+                    onButtonClicked = {
+                        clientProfileViewModel.onEvent(ClientProfileUIEvent.unRegToTrainButtonClicked)
+                     })
+
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Card(
                     modifier = Modifier.padding(8.dp),
@@ -136,12 +143,12 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
             }
         }
     }
-    if (clientProfileViewModel.ratePopupMessage.value != null) {
+    if (clientProfileViewModel.popupMessage.value != null) {
         AlertDialog(
-            onDismissRequest = { clientProfileViewModel.ratePopupMessage.value = null },
+            onDismissRequest = { clientProfileViewModel.popupMessage.value = null },
             title = { Text("") },
-            text = { Text(clientProfileViewModel.ratePopupMessage.value!!) },
-            confirmButton = { TextButton(onClick = { clientProfileViewModel.ratePopupMessage.value = null }) { Text("OK") } }
+            text = { Text(clientProfileViewModel.popupMessage.value!!) },
+            confirmButton = { TextButton(onClick = { clientProfileViewModel.popupMessage.value = null }) { Text("OK") } }
         )
     }
 }
