@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.yogatime.data.AddEvent.AddNewEventState
+import com.example.yogatime.data.Client.ClientProfileUIState
 import com.example.yogatime.data.Client.RegToTrainState
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.rules.NavigationItem
@@ -27,6 +28,8 @@ import java.util.*
 class ManagerHomeViewModel :ViewModel() {
     var trainList = mutableStateListOf<TrainUiState>()
     var trainClick : TrainUiState? = null
+    val rateList = mutableStateListOf<ClientProfileUIState>()
+
 
     fun onEvent(event : ManagerHomeUIEvent) {
         when (event) {
@@ -99,5 +102,41 @@ class ManagerHomeViewModel :ViewModel() {
     private fun parseDate(dateString: String): Date {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return dateFormat.parse(dateString) ?: Date(0)
+    }
+
+
+    fun getRate() {
+        val database = FirebaseDatabase.getInstance()
+        val databaseRef = database.reference.child("rate")
+
+        databaseRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val newRateList = mutableListOf<ClientProfileUIState>()
+
+                for (snapshot in dataSnapshot.children) {
+                    try {
+                        val rate = snapshot.getValue(ClientProfileUIState::class.java)
+                        rate?.let {
+                            when(it.rateInString){
+                                "one" -> { it.rating = "1" }
+                                "two" -> { it.rating = "2" }
+                                "three" -> { it.rating = "3" }
+                                "four" -> { it.rating = "4" }
+                                "five" -> { it.rating = "5" }
+                            }
+                            newRateList.add(it)
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error parsing data: ${e.message}")
+                    }
+                }
+                rateList.clear()
+                rateList.addAll(newRateList)
+                rateList.reverse()
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Error fetching data: ${error.message}")
+            }
+        })
     }
 }

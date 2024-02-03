@@ -7,5 +7,5 @@ data class TrainUiState(
     var EventDate: String = "",
     var EventTime: String = "",
     var NumberOfParticipants: String = "",
-    var userList: List<userRegState>? = null
+    var userList:  MutableList<userRegState>? = null
 )

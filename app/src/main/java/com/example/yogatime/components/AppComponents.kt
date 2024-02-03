@@ -438,9 +438,9 @@ fun BirthdayDatePicker(
     val context = LocalContext.current
     var selectedDate by remember { mutableStateOf("") }
     val calendar = Calendar.getInstance()
-    // Adjust the calendar to start 100 years back for a birthday picker
+    // Adjust the calendar to start 20 years back for a birthday picker
     val YearsBack = calendar.apply {
-        add(Calendar.YEAR, -100)
+        add(Calendar.YEAR, -20)
     }.timeInMillis
 
     val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
