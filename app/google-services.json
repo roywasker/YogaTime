@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "228948086816",
+    "firebase_url": "https://yogatime-4d734-default-rtdb.firebaseio.com",
+    "project_id": "yogatime-4d734",
+    "storage_bucket": "yogatime-4d734.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228948086816:android:9e92c270375d33c7216c45",
+        "android_client_info": {
+          "package_name": "com.example.yogatime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFdL2d-nJX1WxwHp5xlzS_Jk3qetM1Kf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
