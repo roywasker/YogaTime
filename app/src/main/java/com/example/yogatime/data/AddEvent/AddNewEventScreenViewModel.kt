@@ -8,11 +8,13 @@ import com.example.yogatime.data.rules.rules_new_event
 import com.example.yogatime.data.sighup.RegistrationUiState
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class AddNewEventScreenViewModel : ViewModel(){
     var AddNewEventState = mutableStateOf(AddNewEventState())
     var allValidationsPassed = mutableStateOf(false)
+    val popupMessage = mutableStateOf<String?>(null)
 
     fun onEvent(event : AddNewEvent_UIEvent){
         when(event){
@@ -66,10 +68,16 @@ class AddNewEventScreenViewModel : ViewModel(){
     }
 
     private fun createEventInFirebase(EventName: String, EventDate: String, EventTime: String, NumberOfParticipants: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+        var userEmail = ""
+        if (user != null){
+            userEmail = user.email.toString()
+        }
         val databaseRef = FirebaseDatabase.getInstance().getReference("AddNewEvent")
         val EventId = databaseRef.push().key ?: return
 
         val EventInfo = hashMapOf(
+            "UserEmail" to userEmail,
             "EventName" to EventName,
             "EventDate" to EventDate,
             "EventTime" to EventTime,
@@ -80,7 +88,7 @@ class AddNewEventScreenViewModel : ViewModel(){
             YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
 
         }.addOnFailureListener {
-            // Optionally handle failure, such as retry mechanisms
+            popupMessage.value = "Failure to add new train"
         }
     }
 

@@ -78,13 +78,12 @@ import android.os.Build
 import android.provider.MediaStore
 import android.widget.DatePicker
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -92,27 +91,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.TextField
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material.ripple.rememberRipple
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.asImageBitmap
@@ -121,17 +102,10 @@ import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import java.util.*
 import coil.compose.AsyncImage
 import com.example.yogatime.data.Client.ClientProfileUIState
-import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.gallery.GallertUIStateForDisplay
 import com.example.yogatime.data.AddEvent.AddNewEventState
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
-
-
+import com.example.yogatime.data.Client.RegToTrainState
+import com.example.yogatime.data.Manager.TrainUiState
 
 
 @Composable
@@ -464,9 +438,9 @@ fun BirthdayDatePicker(
     val context = LocalContext.current
     var selectedDate by remember { mutableStateOf("") }
     val calendar = Calendar.getInstance()
-    // Adjust the calendar to start 100 years back for a birthday picker
+    // Adjust the calendar to start 20 years back for a birthday picker
     val YearsBack = calendar.apply {
-        add(Calendar.YEAR, -100)
+        add(Calendar.YEAR, -20)
     }.timeInMillis
 
     val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
@@ -778,10 +752,6 @@ fun SinglePhotoPicker(){
                 Text("Upload")
             }
         }
-
-
-
-
     }
 }
 
@@ -1286,34 +1256,141 @@ fun NumberOfParticipante(
     )
 }
 @Composable
-fun HorizontalRecyclerViewForTrain(TrainList: List<AddNewEventState>) {
-    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
-        for (train in TrainList){
-            TrainToDisplay(train)
+fun HorizontalRecyclerViewForTrain(TrainList: List<RegToTrainState>, onImageClick: (RegToTrainState) -> Unit) {
+    var selectedCardIndex by remember { mutableStateOf(-1) }
+
+    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        for ((index, train) in TrainList.withIndex()) {
+            TrainToDisplay(train, onImageClick, isSelected = index == selectedCardIndex) {
+                selectedCardIndex = index
+            }
         }
     }
 }
 
-
 @Composable
-fun TrainToDisplay(trainData: AddNewEventState) {
+fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -> Unit, isSelected: Boolean, onCardClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(200.dp)
-            .height(120.dp),
+            .height(120.dp)
+            .clickable {
+                onCardClick()
+                onImageClick(trainData)
+            }
+            .background(if (isSelected) Color.Gray else Color.White),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(Color.White)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = "Train details")
             Text(text = trainData.EventName)
-            Text(text =trainData.EventDate)
-            Text(text =trainData.EventTime)
+            Text(text = trainData.EventDate)
+            Text(text = trainData.EventTime)
         }
-
-
     }
 }
 
 
+@Composable
+fun HorizontalRecyclerViewForDelImage(imageList: List<GallertUIStateForDisplay>, onImageClick: (String) -> Unit) {
+    var selectedCardIndex by remember { mutableStateOf(-1) }
+
+    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        /*for (image in imageList) {
+            ImageToDisplayForDelImage(image, onImageClick)
+        }*/
+        for ((index, image) in imageList.withIndex()) {
+            ImageToDisplayForDelImage(image, onImageClick, isSelected = index == selectedCardIndex) {
+                selectedCardIndex = index
+            }
+        }
+    }
+}
+@Composable
+fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick: (String) -> Unit,isSelected: Boolean, onCardClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
+            .height(120.dp)
+            .clickable {
+                onCardClick()
+                onImageClick(imageData.name) }  // Add click handling here
+            .background(if (isSelected) Color.Gray else Color.White),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White)
+    ) {
+        AsyncImage(
+            model = imageData.url,
+            contentDescription = imageData.name,
+            modifier = Modifier
+                .width(200.dp)
+                .height(120.dp)
+        )
+    }
+}
+
+@Composable
+fun HorizontalRecyclerViewForTrainForManager(TrainList: List<TrainUiState>, onImageClick: (TrainUiState) -> Unit) {
+    var selectedCardIndex by remember { mutableStateOf(-1) }
+
+    Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
+        /*for (train in TrainList){
+            TrainToDisplayForManager(train, onImageClick)
+        }*/
+        for ((index, train) in TrainList.withIndex()) {
+            TrainToDisplayForManager(train, onImageClick, isSelected = index == selectedCardIndex) {
+                selectedCardIndex = index
+            }
+        }
+    }
+}
+
+
+@Composable
+fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiState) -> Unit,isSelected: Boolean, onCardClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(200.dp)
+            .height(120.dp)
+            .clickable {
+                onCardClick()
+                onImageClick(trainData) }
+            .background(if (isSelected) Color.Gray else Color.White),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White),
+
+        ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(text = "Train details")
+            Text(text = trainData.EventName)
+            Text(text = trainData.EventDate)
+            Text(text = trainData.EventTime)
+            Text(text = trainData.NumberOfParticipants)
+        }
+    }
+}
+
+@Composable
+fun DisplayUserRegisterForTrain(trainData: TrainUiState){
+    val userList = trainData.userList
+    Column(modifier = Modifier.padding(8.dp)) {
+        HeadingTextComponent(value = "Event name : ${trainData.EventName}")
+        Spacer(modifier = Modifier.height(20.dp))
+        HeadingTextComponent(value = "Event date : ${trainData.EventDate}")
+        Spacer(modifier = Modifier.height(20.dp))
+        HeadingTextComponent(value = "Event time : ${trainData.EventTime}")
+        Spacer(modifier = Modifier.height(20.dp))
+        HeadingTextComponent(value = "User register :")
+        Spacer(modifier = Modifier.height(20.dp))
+        if (userList != null) {
+            for (user in userList){
+                NormalTextToLeftCornerComponent(value = "${user.userName}"
+                )
+            }
+        }
+    }
+}

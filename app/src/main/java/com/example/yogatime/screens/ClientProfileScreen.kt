@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
 import com.example.yogatime.components.HeadingTextComponent
+import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextComponent
@@ -39,13 +40,15 @@ import com.example.yogatime.components.NormalTextToLeftCornerComponent
 import com.example.yogatime.components.RatingBar
 import com.example.yogatime.components.ReviewTextField
 import com.example.yogatime.components.SmallButtonComponent
+import com.example.yogatime.data.Client.ClienHomeUIEvent
+import com.example.yogatime.data.Client.ClientHomeViewModel
 import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.Client.ClientProfileViewModel
 import com.example.yogatime.data.ToolBar
 import kotlinx.coroutines.launch
 
 @Composable
-fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewModel()){
+fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewModel(), clientHomeViewModel: ClientHomeViewModel = viewModel()){
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     var rating by remember { mutableIntStateOf(4) }
@@ -87,13 +90,28 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
                 HeadingTextComponent(value = "Hey , ${ToolBar.fullNameId.value}")
                 NormalTextComponent(value = "Email : ${ToolBar.emailId.value}")
                 NormalTextComponent(value = "Phone : ${ToolBar.phoneId.value}")
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 SmallButtonComponent(value = "Edit",
                     onButtonClicked = {
                         clientProfileViewModel.onEvent(ClientProfileUIEvent.EditButtonClicked)
                     })
 
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
+                HeadingTextComponent(value = "My train :")
+
+                HorizontalRecyclerViewForTrain(clientHomeViewModel.trainListForUser,
+                    onImageClick = {
+                        clientProfileViewModel.onEvent(ClientProfileUIEvent.trainToDelete(it))
+                    })
+
+                Spacer(modifier = Modifier.height(10.dp))
+                SmallButtonComponent(value = "Delete",
+                    onButtonClicked = {
+                        clientProfileViewModel.onEvent(ClientProfileUIEvent.unRegToTrainButtonClicked)
+                     })
+
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Card(
                     modifier = Modifier.padding(8.dp),
@@ -125,12 +143,12 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
             }
         }
     }
-    if (clientProfileViewModel.ratePopupMessage.value != null) {
+    if (clientProfileViewModel.popupMessage.value != null) {
         AlertDialog(
-            onDismissRequest = { clientProfileViewModel.ratePopupMessage.value = null },
+            onDismissRequest = { clientProfileViewModel.popupMessage.value = null },
             title = { Text("") },
-            text = { Text(clientProfileViewModel.ratePopupMessage.value!!) },
-            confirmButton = { TextButton(onClick = { clientProfileViewModel.ratePopupMessage.value = null }) { Text("OK") } }
+            text = { Text(clientProfileViewModel.popupMessage.value!!) },
+            confirmButton = { TextButton(onClick = { clientProfileViewModel.popupMessage.value = null }) { Text("OK") } }
         )
     }
 }

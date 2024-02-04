@@ -14,6 +14,7 @@ sealed class Screen {
     object GalleryScreen : Screen()
     object AddNewEventScreen : Screen()
     object EditUserDataScreen : Screen()
+    object TrainUserDisplayScreen : Screen()
 
 }
 

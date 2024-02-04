@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -22,9 +25,11 @@ import com.example.yogatime.components.AppToolbar
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.HorizontalRecyclerView
 import com.example.yogatime.components.HorizontalRecyclerViewForRate
+import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextToLeftCornerComponent
+import com.example.yogatime.components.SmallButtonComponent
 import com.example.yogatime.data.Client.ClienHomeUIEvent
 import com.example.yogatime.data.Client.ClientHomeViewModel
 import com.example.yogatime.data.ToolBar
@@ -40,6 +45,8 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
     ToolBar.getUserData()
     clientHomeViewModel.getImage()
     clientHomeViewModel.getRate()
+    clientHomeViewModel.getTrains()
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
@@ -72,13 +79,22 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
 
-                HeadingTextComponent(value = "Home page")
-                Spacer(modifier = Modifier.height(40.dp))
+                HeadingTextComponent(value = "Our train : ")
 
+                HorizontalRecyclerViewForTrain(clientHomeViewModel.trainList,
+                    onImageClick = {
+                        clientHomeViewModel.onEvent(ClienHomeUIEvent.trainId(it))
+                    })
+                SmallButtonComponent(value = "Register",
+                    onButtonClicked = {
+                        clientHomeViewModel.onEvent(ClienHomeUIEvent.regToTrainButtonClicked)
+                    })
+
+                Spacer(modifier = Modifier.height(20.dp))
                 NormalTextToLeftCornerComponent(value = "Our Gallery : ")
                 HorizontalRecyclerView(imageList = clientHomeViewModel.imageList)
 
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(30.dp))
                 NormalTextToLeftCornerComponent(value = "Our rate : ")
                 Spacer(modifier = Modifier.height(5.dp))
                 NormalTextToLeftCornerComponent(value = "Avg rate : ${String.format("%.2f", clientHomeViewModel.avgRate.doubleValue)}")
@@ -86,6 +102,13 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
                 HorizontalRecyclerViewForRate(rateList = clientHomeViewModel.rateList)
             }
         }
+    }
+    if (clientHomeViewModel.popupMessage.value != null) {
+        AlertDialog(
+            onDismissRequest = { clientHomeViewModel.popupMessage.value = null },
+            text = { Text(clientHomeViewModel.popupMessage.value!!) },
+            confirmButton = { TextButton(onClick = { clientHomeViewModel.popupMessage.value = null }) { Text("OK") } }
+        )
     }
 }
 

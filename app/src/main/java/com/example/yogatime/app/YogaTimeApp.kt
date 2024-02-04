@@ -18,6 +18,7 @@ import com.example.yogatime.screens.ClientProfileScreen
 import com.example.yogatime.screens.EditUserDataScreen
 import com.example.yogatime.screens.ManagerHomeScreen
 import com.example.yogatime.screens.ManagerProfileScreen
+import com.example.yogatime.screens.TrainUserDisplayScreen
 
 
 @Composable
@@ -54,6 +55,9 @@ fun YogaTimeApp(){
                 }
                 is Screen.EditUserDataScreen ->{
                     EditUserDataScreen()
+                }
+                is Screen.TrainUserDisplayScreen ->{
+                    TrainUserDisplayScreen()
                 }
             }
         }
