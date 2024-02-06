@@ -59,6 +59,7 @@ fun YogaTimeApp(){
                 is Screen.TrainUserDisplayScreen ->{
                     TrainUserDisplayScreen()
                 }
+
             }
         }
     }

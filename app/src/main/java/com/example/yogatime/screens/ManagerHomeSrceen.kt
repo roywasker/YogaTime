@@ -36,7 +36,9 @@ import com.example.yogatime.components.HorizontalRecyclerViewForRate
 import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.HorizontalRecyclerViewForTrainForManager
 import com.example.yogatime.components.NormalTextToLeftCornerComponent
+import com.example.yogatime.components.SmallButtonComponent
 import com.example.yogatime.data.AddEvent.AddNewEventScreenViewModel
+import com.example.yogatime.data.Client.ClienHomeUIEvent
 import com.example.yogatime.data.ToolBar
 
 
@@ -83,7 +85,6 @@ fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel())
             Column(modifier = Modifier.fillMaxSize()) {
 
                 HeadingTextComponent(value = "My trains")
-
                 HorizontalRecyclerViewForTrainForManager(managerHomeViewModel.trainList,
                     onImageClick = {
                         managerHomeViewModel.onEvent(ManagerHomeUIEvent.cardClicked(it))

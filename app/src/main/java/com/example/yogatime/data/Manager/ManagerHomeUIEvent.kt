@@ -7,4 +7,6 @@ sealed class ManagerHomeUIEvent {
     object ProfileButtonClicked : ManagerHomeUIEvent()
 
     data class cardClicked(val train: TrainUiState) : ManagerHomeUIEvent()
+
+    object editToTrainButtonClicked : ManagerHomeUIEvent()
 }

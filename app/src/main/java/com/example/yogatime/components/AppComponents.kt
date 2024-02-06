@@ -94,10 +94,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.em
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import java.util.*
 import coil.compose.AsyncImage
@@ -106,6 +110,7 @@ import com.example.yogatime.data.gallery.GallertUIStateForDisplay
 import com.example.yogatime.data.AddEvent.AddNewEventState
 import com.example.yogatime.data.Client.RegToTrainState
 import com.example.yogatime.data.Manager.TrainUiState
+import com.example.yogatime.data.TrainUserDisplay.TrainUserDisplayUIEvent
 
 
 @Composable
@@ -1284,10 +1289,39 @@ fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -
         colors = CardDefaults.cardColors(Color.White)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Text(text = "Train details")
-            Text(text = trainData.EventName)
-            Text(text = trainData.EventDate)
-            Text(text = trainData.EventTime)
+
+            Text(
+                text = trainData.EventName,
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.W800,
+                    fontStyle = FontStyle.Italic,
+                    letterSpacing = 0.5.em,
+                    textDecoration = TextDecoration.Underline
+                )
+
+            )
+            Text(
+                text = "Date: ${trainData.EventDate}",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic,
+                )
+            )
+            Text(
+                text = "Time: ${trainData.EventTime}",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic,
+                )
+            )
+
         }
     }
 }
@@ -1351,6 +1385,9 @@ fun HorizontalRecyclerViewForTrainForManager(TrainList: List<TrainUiState>, onIm
 
 @Composable
 fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiState) -> Unit,isSelected: Boolean, onCardClick: () -> Unit) {
+    val numberOfParticipants: Int = trainData.NumberOfParticipants.toIntOrNull() ?: 0 // Safely convert to Int, default to 0 if conversion fails
+    val userListSize: Int = trainData.userList?.size ?: 0 // Safely handle nullable userList, default to 0 if null
+    val numberOfParticipantLeft = numberOfParticipants - userListSize
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -1365,11 +1402,59 @@ fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiStat
 
         ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Text(text = "Train details")
-            Text(text = trainData.EventName)
-            Text(text = trainData.EventDate)
-            Text(text = trainData.EventTime)
-            Text(text = trainData.NumberOfParticipants)
+
+            Text(
+                text = trainData.EventName,
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.W800,
+
+                    letterSpacing = 0.5.em,
+                    textDecoration = TextDecoration.Underline
+                )
+
+            )
+            Text(
+                text = "Date: ${trainData.EventDate}",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic,
+                )
+            )
+            Text(
+                text = "Time: ${trainData.EventTime}",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic,
+                )
+            )
+
+            Text(
+                text = "Participants that are left : ${(trainData.NumberOfParticipants).toInt()-(trainData.userList?.size?:0)}",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic,
+                )
+            )
+            Text(
+                text = "Participants that are sing: ${(trainData.userList?.size?:0)}",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic,
+                )
+            )
+
+
         }
     }
 }
@@ -1378,19 +1463,153 @@ fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiStat
 fun DisplayUserRegisterForTrain(trainData: TrainUiState){
     val userList = trainData.userList
     Column(modifier = Modifier.padding(8.dp)) {
-        HeadingTextComponent(value = "Event name : ${trainData.EventName}")
-        Spacer(modifier = Modifier.height(20.dp))
-        HeadingTextComponent(value = "Event date : ${trainData.EventDate}")
-        Spacer(modifier = Modifier.height(20.dp))
-        HeadingTextComponent(value = "Event time : ${trainData.EventTime}")
-        Spacer(modifier = Modifier.height(20.dp))
-        HeadingTextComponent(value = "User register :")
+        NormalTextToLeftCornerComponent(value = "User register :")
         Spacer(modifier = Modifier.height(20.dp))
         if (userList != null) {
             for (user in userList){
+
                 NormalTextToLeftCornerComponent(value = "${user.userName}"
                 )
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplayTrainTime(
+    value: String,
+    labelValue: String,
+    onTimeSelected: (String) -> Unit,
+    errorStatus: Boolean = false
+) {
+    val context = LocalContext.current
+    var selectedTime by remember { mutableStateOf(value) }
+    val calendar = Calendar.getInstance()
+
+    // Prepare the listener for time set
+    val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+        // Format the time in a preferred format, e.g., 24-hour format here
+        selectedTime = String.format("%02d:%02d", hourOfDay, minute)
+        onTimeSelected(selectedTime) // Pass the selected time back
+    }
+
+    // Function to show the time picker dialog
+    val showTimePicker = {
+        TimePickerDialog(
+            context,
+            timeSetListener,
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true // for 24-hour time format, set to false for 12-hour format with AM/PM
+        ).show()
+    }
+
+    // OutlinedTextField to display the selected time
+    OutlinedTextField(
+        value = selectedTime,
+        onValueChange = { selectedTime = it },
+        label = { Text(labelValue) },
+        readOnly = true, // Make the text field read-only
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small)
+            .clickable(onClick = { showTimePicker() }),
+        trailingIcon = {
+            IconButton(onClick = { showTimePicker() }) {
+                Icon(Icons.Default.AccessTime, contentDescription = "Select Time")
+            }
+        },
+        isError = !errorStatus,
+        singleLine = true,
+        maxLines = 1
+    )
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplaydateforTrain(value: String,
+    labelValue: String,
+    onDateSelected: (String) -> Unit,
+    errorStatus: Boolean = false
+) {
+    val context = LocalContext.current
+    var selectedDate by remember { mutableStateOf(value) }
+    val calendar = Calendar.getInstance()
+
+    // Prepare the listener for date set
+    val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        // Note: month is 0 based
+        selectedDate = "$dayOfMonth/${month + 1}/$year"
+        onDateSelected(selectedDate) // Pass the selected date back
+    }
+
+    // Function to show the date picker dialog
+    val showDatePicker = {
+        DatePickerDialog(
+            context,
+            dateSetListener,
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            datePicker.minDate = System.currentTimeMillis() - 1000 // Restrict to today or future
+            show()
+        }
+    }
+    // OutlinedTextField to display the selected date
+    OutlinedTextField(
+        value = selectedDate,
+        onValueChange = { selectedDate = it },
+        label = { Text(labelValue) },
+        readOnly = true, // Make the text field read-only
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small)
+            .clickable(onClick = { showDatePicker() }), // Open date picker on text field click // Open date picker on text field click
+        trailingIcon = {
+            IconButton(onClick = { showDatePicker() }) {
+                Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
+            }
+        },isError = !errorStatus,
+        singleLine = true,
+        maxLines = 1
+    )
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplayNumberOfParticipanteforTrain(value: String,
+    labelValue: String,
+    painterResource: Painter,
+    onTextSelected: (String) -> Unit,
+    errorStatus: Boolean = false
+) {
+    val textValue = remember { mutableStateOf(value) }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small),
+        value = textValue.value,
+        textStyle = TextStyle(fontSize = 18.sp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Primary,
+            focusedLabelColor = Primary,
+            cursorColor = Primary
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Next
+        ),
+        label = { Text(text = labelValue) },
+        singleLine = true,
+        maxLines = 1,
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
+        trailingIcon = { // Moved the icon to trailingIcon
+            Icon(painter = painterResource, contentDescription = null)
+        },
+        isError = !errorStatus
+    )
 }

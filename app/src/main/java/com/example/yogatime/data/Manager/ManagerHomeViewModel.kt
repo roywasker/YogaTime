@@ -43,6 +43,10 @@ class ManagerHomeViewModel :ViewModel() {
                 trainClick = event.train
                 YogaTimeAppRouter.navigateTo(Screen.TrainUserDisplayScreen)
             }
+            is ManagerHomeUIEvent.editToTrainButtonClicked ->{
+
+                YogaTimeAppRouter.navigateTo(Screen.AddNewEventScreen)
+            }
         }
     }
 
@@ -57,7 +61,6 @@ class ManagerHomeViewModel :ViewModel() {
                     try {
                         val train = snapshot.getValue(TrainUiState::class.java)
                         train?.let {
-                            if (train.UserEmail == ToolBar.emailId.value) {
                                 val eventDate = parseDate(train.EventDate)
                                 if (eventDate >= currentDate) {
                                     val userList = mutableListOf<userRegState>()
@@ -81,7 +84,7 @@ class ManagerHomeViewModel :ViewModel() {
                                     it.userList = userList
                                     newTrainList.add(it)
                                 }
-                            }
+
                         }
                     } catch (e: Exception) {
                         Log.e(TAG, "Error parsing data: ${e.message}")

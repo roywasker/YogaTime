@@ -54,6 +54,7 @@ class AddNewEventScreenViewModel : ViewModel(){
             is AddNewEvent_UIEvent.HomeButtonClicked ->{
                 YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
             }
+
         }
     }
 
@@ -77,6 +78,7 @@ class AddNewEventScreenViewModel : ViewModel(){
         val EventId = databaseRef.push().key ?: return
 
         val EventInfo = hashMapOf(
+            "TrainId" to EventId,
             "UserEmail" to userEmail,
             "EventName" to EventName,
             "EventDate" to EventDate,

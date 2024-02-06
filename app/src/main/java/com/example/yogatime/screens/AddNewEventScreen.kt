@@ -83,11 +83,8 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
                 Spacer(modifier = Modifier.height(40.dp))
                 AddEventTextField(
                     labelValue = "Event Name",
-
                     onTextSelected = {
                                      addEventViewModel.onEvent(AddNewEvent_UIEvent.eventNameChanged(it))
-
-
                     },
                     errorStatus = addEventViewModel.AddNewEventState.value.EventNameError
                 )
