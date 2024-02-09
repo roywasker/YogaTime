@@ -6,6 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Surface
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -15,6 +17,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.data.gallery.GalleryScreenViewModel
@@ -22,6 +25,7 @@ import com.example.yogatime.data.gallery.GalleryScreenViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
+import com.example.yogatime.components.DisplayHomeBackgroundImage
 import com.example.yogatime.components.HorizontalRecyclerViewForDelImage
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
@@ -66,29 +70,31 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
             )
         }
     ) {paddingValues ->
-        Surface(
-            color = Color.White,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValues)
-                .padding(18.dp)
-        ) {
-            Column(modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+        Box(modifier = Modifier.fillMaxWidth()) {
+            DisplayHomeBackgroundImage(
+                painterResource = painterResource(id = R.drawable.sun)
+            )
+            androidx.compose.material.Surface(
+                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                HeadingTextComponent(value = "Upload Image to Gallery")
-                SinglePhotoPicker()
+                    HeadingTextComponent(value = "Upload Image to Gallery")
+                    SinglePhotoPicker()
 
-                HeadingTextComponent(value = "Gallery")
-                HorizontalRecyclerViewForDelImage(imageList = galleryScreenViewModel.imageList,
-                    onImageClick ={
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.delImageName(it))
-                    })
-                SmallButtonComponent(value = "Delete",
-                    onButtonClicked = {
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.DelButtonClicked)
-                 })
+                    HeadingTextComponent(value = "Gallery")
+                    HorizontalRecyclerViewForDelImage(imageList = galleryScreenViewModel.imageList,
+                        onImageClick = {
+                            galleryScreenViewModel.onEvent(GalleryUIEvent.delImageName(it))
+                        })
+                    SmallButtonComponent(value = "Delete",
+                        onButtonClicked = {
+                            galleryScreenViewModel.onEvent(GalleryUIEvent.DelButtonClicked)
+                        })
+                }
             }
         }
     }

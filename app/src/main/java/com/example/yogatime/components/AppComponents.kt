@@ -98,7 +98,9 @@ import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.em
@@ -138,7 +140,7 @@ fun NormalTextToLeftCornerComponent(value:String){
             .fillMaxWidth()
             .heightIn(min = 24.dp),
         style = TextStyle(
-            fontSize = 24.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
         )
@@ -173,31 +175,37 @@ fun MyTextField(labelValue: String, painterResource: Painter,
         mutableStateOf("")
     }
 
-    OutlinedTextField(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(componentShapes.small),
-        label = { Text(text = labelValue)},
-        value = textValue.value,
-        textStyle = TextStyle(fontSize = 18.sp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
+            .background(Color.White.copy(alpha = 0.2f)) // Set background opacity
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(componentShapes.small),
+            label = { Text(text = labelValue) },
+            value = textValue.value,
+            textStyle = TextStyle(fontSize = 18.sp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Primary,
+                focusedLabelColor = Primary,
+                cursorColor = Primary,
 
-        ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        singleLine = true,
-        maxLines = 1,
-        onValueChange = {
-            textValue.value = it
-            onTextSelected(it)
-        },
-        leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
-        },
-        isError = !errorStatus
-    )
+                ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            singleLine = true,
+            maxLines = 1,
+            onValueChange = {
+                textValue.value = it
+                onTextSelected(it)
+            },
+            leadingIcon = {
+                Icon(painter = painterResource, contentDescription = "")
+            },
+            isError = !errorStatus
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -243,34 +251,40 @@ fun MyPhoneField(labelValue: String, painterResource: Painter,
         mutableStateOf("")
     }
 
-    OutlinedTextField(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(componentShapes.small),
-        label = { Text(text = labelValue)},
-        value = textValue.value,
-        textStyle = TextStyle(fontSize = 16.sp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
+            .background(Color.White.copy(alpha = 0.2f)) // Set background opacity
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(componentShapes.small),
+            label = { Text(text = labelValue) },
+            value = textValue.value,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Primary,
+                focusedLabelColor = Primary,
+                cursorColor = Primary,
 
+                ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Phone,
+                imeAction = ImeAction.Next
             ),
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Phone,
-            imeAction = ImeAction.Next
-        ),
-        singleLine = true,
-        maxLines = 1,
-        onValueChange = {
-            textValue.value = it
-            onTextSelected(it)
-        },
-        leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
-        },
-        isError = !errorStatus
-    )
+            singleLine = true,
+            maxLines = 1,
+            onValueChange = {
+                textValue.value = it
+                onTextSelected(it)
+            },
+            leadingIcon = {
+                Icon(painter = painterResource, contentDescription = "")
+            },
+            isError = !errorStatus
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -288,53 +302,61 @@ fun PasswordTextField(labelValue: String, painterResource: Painter,
     val passwordVisible = remember {
         mutableStateOf(false)
     }
-
-    OutlinedTextField(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(componentShapes.small),
-        label = { Text(text = labelValue) },
-        value = password.value,
-        textStyle = TextStyle(fontSize = 18.sp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
+            .background(Color.White.copy(alpha = 0.2f)) // Set background opacity
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(componentShapes.small),
+            label = { Text(text = labelValue) },
+            value = password.value,
+            textStyle = TextStyle(fontSize = 18.sp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Primary,
+                focusedLabelColor = Primary,
+                cursorColor = Primary,
             ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
-        singleLine = true,
-        keyboardActions = KeyboardActions{
-            localFocusManager.clearFocus()
-        },
-        maxLines = 1,
-        onValueChange = {
-            password.value = it
-            onTextSelected(it)
-        },
-        leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
-        },
-        trailingIcon = {
-            val iconImage = if (passwordVisible.value){
-                Icons.Filled.Visibility
-            }else{
-                Icons.Filled.VisibilityOff
-            }
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            ),
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                localFocusManager.clearFocus()
+            },
+            maxLines = 1,
+            onValueChange = {
+                password.value = it
+                onTextSelected(it)
+            },
+            leadingIcon = {
+                Icon(painter = painterResource, contentDescription = "")
+            },
+            trailingIcon = {
+                val iconImage = if (passwordVisible.value) {
+                    Icons.Filled.Visibility
+                } else {
+                    Icons.Filled.VisibilityOff
+                }
 
-            val description = if(passwordVisible.value){
-                "Hide password"
-            }else{
-                "Show password"
-            }
+                val description = if (passwordVisible.value) {
+                    "Hide password"
+                } else {
+                    "Show password"
+                }
 
-            IconButton(onClick = { passwordVisible.value = !passwordVisible.value}) {
-                Icon(imageVector = iconImage, contentDescription = description)
-            }
-        },
-        visualTransformation = if (passwordVisible.value) VisualTransformation.None else
-        PasswordVisualTransformation(),
-        isError = !errorStatus
-    )
+                IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                    Icon(imageVector = iconImage, contentDescription = description)
+                }
+            },
+            visualTransformation = if (passwordVisible.value) VisualTransformation.None else
+                PasswordVisualTransformation(),
+            isError = !errorStatus
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -346,34 +368,39 @@ fun MyEmailField(labelValue: String,
     val textValue = remember {
         mutableStateOf("")
     }
-
-    OutlinedTextField(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(componentShapes.small),
-        label = { Text(text = labelValue)},
-        value = textValue.value,
-        textStyle = TextStyle(fontSize = 18.sp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
+            .background(Color.White.copy(alpha = 0.2f)) // Set background opacity
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(componentShapes.small),
+            label = { Text(text = labelValue) },
+            value = textValue.value,
+            textStyle = TextStyle(fontSize = 18.sp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Primary,
+                focusedLabelColor = Primary,
+                cursorColor = Primary,
 
-            ), keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next
-        ),
-        singleLine = true,
-        maxLines = 1,
-        onValueChange = {
-            textValue.value = it
-            onTextSelected(it)
-        },
-        leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
-        },
-        isError = !errorStatus
-    )
+                ), keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            singleLine = true,
+            maxLines = 1,
+            onValueChange = {
+                textValue.value = it
+                onTextSelected(it)
+            },
+            leadingIcon = {
+                Icon(painter = painterResource, contentDescription = "")
+            },
+            isError = !errorStatus
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -454,46 +481,53 @@ fun BirthdayDatePicker(
         onDateSelected(selectedDate) // Pass the selected date back to the caller
     }
 
-    OutlinedTextField(
-        value = selectedDate,
-        onValueChange = { /* Read-only field */ },
-        readOnly = true,
-        modifier = modifier
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
-            .clip(componentShapes.small),
-        textStyle = TextStyle(fontSize = 18.sp),
-        label = { Text(text = labelValue) },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.DateRange,
-                contentDescription = "Select Date",
-                modifier = Modifier.clickable {
-                    DatePickerDialog(
-                        context,
-                        dateSetListener,
-                        calendar.get(Calendar.YEAR) - 70, // Start 70 years back
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)
-                    ).apply {
-                        datePicker.maxDate = System.currentTimeMillis() // Ensure future dates cannot be picked
-                        datePicker.minDate = YearsBack // Optional: Set a minimum date if needed
-                                show()
+            .background(Color.White.copy(alpha = 0.2f)) // Set background opacity
+    ) {
+        OutlinedTextField(
+            value = selectedDate,
+            onValueChange = { /* Read-only field */ },
+            readOnly = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .clip(componentShapes.small),
+            textStyle = TextStyle(fontSize = 18.sp),
+            label = { Text(text = labelValue) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Select Date",
+                    modifier = Modifier.clickable {
+                        DatePickerDialog(
+                            context,
+                            dateSetListener,
+                            calendar.get(Calendar.YEAR) - 70, // Start 70 years back
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)
+                        ).apply {
+                            datePicker.maxDate =
+                                System.currentTimeMillis() // Ensure future dates cannot be picked
+                            datePicker.minDate = YearsBack // Optional: Set a minimum date if needed
+                            show()
+                        }
                     }
-                }
-            )
-        },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
-        ),
-        singleLine = true,
-        maxLines = 1,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Next
-        ),
-        isError = !errorStatus
-    )
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Primary,
+                focusedLabelColor = Primary,
+                cursorColor = Primary,
+            ),
+            singleLine = true,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
+            isError = !errorStatus
+        )
+    }
 }
 
 
@@ -1100,11 +1134,12 @@ fun SmallButtonComponent(value:String, onButtonClicked : () -> Unit, isEnabled: 
                 brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
                 shape = RoundedCornerShape(50.dp)
             ),
-            contentAlignment = Alignment.Center
         ) {
             Text(text = value,
+                modifier = Modifier.align(Alignment.Center), // Center the text within the Box
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold)
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
@@ -1611,5 +1646,29 @@ fun DisplayNumberOfParticipanteforTrain(value: String,
             Icon(painter = painterResource, contentDescription = null)
         },
         isError = !errorStatus
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplayBackgroundImage()
+{
+    Image(
+        painter = painterResource(id = R.drawable.background_yoga),
+        contentDescription = "Background image",
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.FillBounds // Adjust image scaling as needed
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplayHomeBackgroundImage(painterResource: Painter)
+{
+    Image(
+        painter = painterResource,
+        contentDescription = "Background image",
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.FillBounds // Adjust image scaling as needed
     )
 }

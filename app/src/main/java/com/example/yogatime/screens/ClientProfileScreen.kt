@@ -2,9 +2,11 @@ package com.example.yogatime.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,11 +28,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
+import com.example.yogatime.components.DisplayHomeBackgroundImage
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.NavigationDrawerBody
@@ -78,67 +82,72 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
             )
         }
     ) {paddingValues ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValues)
-        ) {
-            Column(modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+        Box(modifier = Modifier.fillMaxWidth()) {
+            DisplayHomeBackgroundImage(
+                painterResource = painterResource(id = R.drawable.sun)
+            )
+            androidx.compose.material3.Surface(
+                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                modifier = Modifier.fillMaxSize()
             ) {
-                HeadingTextComponent(value = "Hey , ${ToolBar.fullNameId.value}")
-                NormalTextComponent(value = "Email : ${ToolBar.emailId.value}")
-                NormalTextComponent(value = "Phone : ${ToolBar.phoneId.value}")
-                Spacer(modifier = Modifier.height(10.dp))
-                SmallButtonComponent(value = "Edit",
-                    onButtonClicked = {
-                        clientProfileViewModel.onEvent(ClientProfileUIEvent.EditButtonClicked)
-                    })
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                HeadingTextComponent(value = "My train :")
-
-                HorizontalRecyclerViewForTrain(clientHomeViewModel.trainListForUser,
-                    onImageClick = {
-                        clientProfileViewModel.onEvent(ClientProfileUIEvent.trainToDelete(it))
-                    })
-
-                Spacer(modifier = Modifier.height(10.dp))
-                SmallButtonComponent(value = "Delete",
-                    onButtonClicked = {
-                        clientProfileViewModel.onEvent(ClientProfileUIEvent.unRegToTrainButtonClicked)
-                     })
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Card(
-                    modifier = Modifier.padding(8.dp),
-                    elevation = CardDefaults.cardElevation(4.dp),
-                    colors = CardDefaults.cardColors(Color.White)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    NormalTextToLeftCornerComponent(value = "Rate us ")
-                    RatingBar(
-                        modifier = Modifier
-                            .size(50.dp),
-                        rating = rating,
-                        onRatingChanged = {
-                            rating = it.toInt()
-                            clientProfileViewModel.onEvent(ClientProfileUIEvent.addRating(it.toInt()))
-                        }
-                    )
+                    HeadingTextComponent(value = "Hey , ${ToolBar.fullNameId.value}")
+                    NormalTextComponent(value = "Email : ${ToolBar.emailId.value}")
+                    NormalTextComponent(value = "Phone : ${ToolBar.phoneId.value}")
                     Spacer(modifier = Modifier.height(10.dp))
-
-                    ReviewTextField(labelValue = "Write some word",
-                        onTextSelected = {clientProfileViewModel.onEvent(ClientProfileUIEvent.addReview(it))
-                        })
-
-                    Spacer(modifier = Modifier.height(10.dp))
-                    SmallButtonComponent(value = "Send",
+                    SmallButtonComponent(value = "Edit",
                         onButtonClicked = {
-                            clientProfileViewModel.onEvent(ClientProfileUIEvent.RatingButtonClicked)
+                            clientProfileViewModel.onEvent(ClientProfileUIEvent.EditButtonClicked)
                         })
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    HeadingTextComponent(value = "My train :")
+
+                    HorizontalRecyclerViewForTrain(clientHomeViewModel.trainListForUser,
+                        onImageClick = {
+                            clientProfileViewModel.onEvent(ClientProfileUIEvent.trainToDelete(it))
+                        })
+
+                    Spacer(modifier = Modifier.height(10.dp))
+                    SmallButtonComponent(value = "Delete",
+                        onButtonClicked = {
+                            clientProfileViewModel.onEvent(ClientProfileUIEvent.unRegToTrainButtonClicked)
+                        })
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Card(
+                        modifier = Modifier.padding(8.dp),
+                        elevation = CardDefaults.cardElevation(4.dp),
+                        colors = CardDefaults.cardColors(Color.White)
+                    ) {
+                        HeadingTextComponent(value = "Rate us ")
+                        RatingBar(
+                            modifier = Modifier
+                                .size(50.dp),
+                            rating = rating,
+                            onRatingChanged = {
+                                rating = it.toInt()
+                                clientProfileViewModel.onEvent(ClientProfileUIEvent.addRating(it.toInt()))
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        ReviewTextField(labelValue = "Write some word",
+                            onTextSelected = {
+                                clientProfileViewModel.onEvent(ClientProfileUIEvent.addReview(it))
+                            })
+
+                        Spacer(modifier = Modifier.height(10.dp))
+                        SmallButtonComponent(value = "Send",
+                            onButtonClicked = {
+                                clientProfileViewModel.onEvent(ClientProfileUIEvent.RatingButtonClicked)
+                            })
+                    }
                 }
             }
         }

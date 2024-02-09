@@ -2,9 +2,11 @@ package com.example.yogatime.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,11 +20,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
+import com.example.yogatime.components.DisplayHomeBackgroundImage
 import com.example.yogatime.components.DisplayUserData
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.NavigationDrawerBody
@@ -72,43 +76,60 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
                 }
             )
         }
-    ) {paddingValues ->
-        Surface(
-            color = Color.White,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValues).padding(18.dp)
-        ) {
-            Column(modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+    ) { paddingValues ->
+        Box(modifier = Modifier.fillMaxWidth()) {
+            DisplayHomeBackgroundImage(
+                painterResource = painterResource(id = R.drawable.homescreenbackground)
+            )
+            Surface(
+                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                modifier = Modifier.fillMaxSize()
             ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                ToolBar.fullNameId.value?.let { DisplayUserData(value = it, label = stringResource(id = R.string.name),
-                    onTextSelected ={
-                        editUserViewModel.onEvent(EditUserUIEvent.fullNameChanged(it))
-                },
-                    errorStatus = editUserViewModel.editUserDataUiState.value.fullNameError) }
+                    ToolBar.fullNameId.value?.let {
+                        DisplayUserData(
+                            value = it, label = stringResource(id = R.string.name),
+                            onTextSelected = {
+                                editUserViewModel.onEvent(EditUserUIEvent.fullNameChanged(it))
+                            },
+                            errorStatus = editUserViewModel.editUserDataUiState.value.fullNameError
+                        )
+                    }
 
-                ToolBar.emailId.value?.let { DisplayUserData(value = it, label = stringResource(id = R.string.email),
-                    onTextSelected ={
-                        editUserViewModel.onEvent(EditUserUIEvent.emailChanged(it))
-                    },
-                    errorStatus = editUserViewModel.editUserDataUiState.value.emailError) }
+                    ToolBar.emailId.value?.let {
+                        DisplayUserData(
+                            value = it, label = stringResource(id = R.string.email),
+                            onTextSelected = {
+                                editUserViewModel.onEvent(EditUserUIEvent.emailChanged(it))
+                            },
+                            errorStatus = editUserViewModel.editUserDataUiState.value.emailError
+                        )
+                    }
 
-                ToolBar.phoneId.value?.let { DisplayUserData(value = it, label = stringResource(id = R.string.phone),
-                    onTextSelected ={
-                        editUserViewModel.onEvent(EditUserUIEvent.phoneChanged(it))
-                    },
-                    errorStatus = editUserViewModel.editUserDataUiState.value.phoneError) }
+                    ToolBar.phoneId.value?.let {
+                        DisplayUserData(
+                            value = it, label = stringResource(id = R.string.phone),
+                            onTextSelected = {
+                                editUserViewModel.onEvent(EditUserUIEvent.phoneChanged(it))
+                            },
+                            errorStatus = editUserViewModel.editUserDataUiState.value.phoneError
+                        )
+                    }
 
-                Spacer(modifier = Modifier.height(40.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
 
-                SmallButtonComponent(value = "Save",
-                    onButtonClicked = {
-                        editUserViewModel.onEvent(EditUserUIEvent.EditButtonClicked)
-                    },
-                    isEnabled = editUserViewModel.allValidationsPassed.value)
+                    SmallButtonComponent(
+                        value = "Save",
+                        onButtonClicked = {
+                            editUserViewModel.onEvent(EditUserUIEvent.EditButtonClicked)
+                        },
+                        isEnabled = editUserViewModel.allValidationsPassed.value
+                    )
+                }
             }
         }
     }

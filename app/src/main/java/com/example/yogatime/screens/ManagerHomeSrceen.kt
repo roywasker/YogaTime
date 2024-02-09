@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +32,9 @@ import com.example.yogatime.navigation.YogaTimeAppRouter
 import kotlinx.coroutines.launch
 import androidx.compose.material.Surface
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.yogatime.components.DisplayHomeBackgroundImage
 import com.example.yogatime.components.HorizontalRecyclerViewForRate
 import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.HorizontalRecyclerViewForTrainForManager
@@ -74,41 +77,43 @@ fun ManagerHomeScreen (managerHomeViewModel: ManagerHomeViewModel = viewModel())
                 }
             )
         }
-    ) {paddingValues ->
-        Surface(color = Color.White,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValues)
-                .padding(18.dp)
-        ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+    ) { paddingValues ->
+        Box(modifier = Modifier.fillMaxWidth()) {
+            DisplayHomeBackgroundImage(
+                painterResource = painterResource(id = R.drawable.sun)
+            )
+            Surface(
+                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
 
-                HeadingTextComponent(value = "My trains")
-                HorizontalRecyclerViewForTrainForManager(managerHomeViewModel.trainList,
-                    onImageClick = {
-                        managerHomeViewModel.onEvent(ManagerHomeUIEvent.cardClicked(it))
-                    })
-                Spacer(modifier = Modifier.height(20.dp))
+                    HeadingTextComponent(value = "My trains")
+                    HorizontalRecyclerViewForTrainForManager(managerHomeViewModel.trainList,
+                        onImageClick = {
+                            managerHomeViewModel.onEvent(ManagerHomeUIEvent.cardClicked(it))
+                        })
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                Row (modifier = Modifier.fillMaxWidth()){
-                    Button(onClick = {
-                        YogaTimeAppRouter.navigateTo(Screen.AddNewEventScreen)
-                    }) {
-                        Text("Go to Add New Event")
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Button(onClick = {
+                            YogaTimeAppRouter.navigateTo(Screen.AddNewEventScreen)
+                        }) {
+                            Text("Go to Add New Event")
+                        }
+                        Spacer(modifier = Modifier.width(25.dp))
+                        Button(onClick = {
+                            YogaTimeAppRouter.navigateTo(Screen.GalleryScreen)
+                        }) {
+                            Text("Go to Gallery")
+                        }
                     }
-                    Spacer(modifier = Modifier.width(25.dp))
-                    Button(onClick = {
-                        YogaTimeAppRouter.navigateTo(Screen.GalleryScreen)
-                    }) {
-                        Text("Go to Gallery")
-                    }
+
+                    Spacer(modifier = Modifier.height(40.dp))
+                    HeadingTextComponent(value = "Our rate : ")
+                    Spacer(modifier = Modifier.height(5.dp))
+                    HorizontalRecyclerViewForRate(rateList = managerHomeViewModel.rateList)
                 }
-
-                Spacer(modifier = Modifier.height(40.dp))
-                NormalTextToLeftCornerComponent(value = "Our rate : ")
-                Spacer(modifier = Modifier.height(5.dp))
-                HorizontalRecyclerViewForRate(rateList = managerHomeViewModel.rateList)
             }
         }
     }

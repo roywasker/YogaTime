@@ -1,9 +1,11 @@
 package com.example.yogatime.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
@@ -22,6 +24,7 @@ import com.example.yogatime.R
 import com.example.yogatime.components.BirthdayDatePicker
 import com.example.yogatime.components.ButtonComponent
 import com.example.yogatime.components.ClickableTextComponent
+import com.example.yogatime.components.DisplayBackgroundImage
 import com.example.yogatime.components.MyEmailField
 import com.example.yogatime.components.MyPhoneField
 import com.example.yogatime.components.PasswordTextField
@@ -34,14 +37,16 @@ import com.example.yogatime.navigation.YogaTimeAppRouter
 
 @Composable
 fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
-    Surface(color = Color.White,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(18.dp)
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        DisplayBackgroundImage()
+
+        Surface(
+            color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+            modifier = Modifier.fillMaxSize()
         ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-                NormalTextComponent(value = stringResource(id = R.string.hello ))
+            Column(modifier = Modifier.fillMaxSize()) {
+                NormalTextComponent(value = stringResource(id = R.string.hello))
                 HeadingTextComponent(value = stringResource(id = R.string.Create_an_Account))
                 Spacer(modifier = Modifier.height(40.dp))
                 MyTextField(
@@ -52,7 +57,8 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
                     },
                     errorStatus = sighUpViewModel.registrationUiState.value.fullNameError
                 )
-                MyEmailField(labelValue = stringResource(id = R.string.email),
+                MyEmailField(
+                    labelValue = stringResource(id = R.string.email),
                     painterResource = painterResource(id = R.drawable.message),
                     onTextSelected = {
                         sighUpViewModel.onEvent(SignupUIEvent.emailChanged(it))
@@ -63,19 +69,23 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
 //                    painterResource(id = R.drawable.ic_calendar) ,
 //                    onDateSelected ={sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) } )
 
-                BirthdayDatePicker(labelValue = stringResource(id = R.string.date_of_birth) ,
-                    onDateSelected  = { sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) },
-                    errorStatus = sighUpViewModel.registrationUiState.value.dateOfBirthError)
+                BirthdayDatePicker(
+                    labelValue = stringResource(id = R.string.date_of_birth),
+                    onDateSelected = { sighUpViewModel.onEvent(SignupUIEvent.dateOfBirthChanged(it)) },
+                    errorStatus = sighUpViewModel.registrationUiState.value.dateOfBirthError
+                )
 
 //            DateFromTodayCompose()
 
 
-                MyPhoneField(labelValue = stringResource(id = R.string.phone) ,
+                MyPhoneField(
+                    labelValue = stringResource(id = R.string.phone),
                     painterResource = painterResource(id = R.drawable.phone),
                     onTextSelected = {
                         sighUpViewModel.onEvent(SignupUIEvent.phoneChanged(it))
                     },
-                    errorStatus = sighUpViewModel.registrationUiState.value.phoneError )
+                    errorStatus = sighUpViewModel.registrationUiState.value.phoneError
+                )
 
 
                 PasswordTextField(
@@ -87,19 +97,21 @@ fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
                     errorStatus = sighUpViewModel.registrationUiState.value.passwordError
                 )
                 Spacer(modifier = Modifier.height(80.dp))
-                ButtonComponent(value = stringResource(id = R.string.register),
-                    onButtonClicked ={
+                ButtonComponent(
+                    value = stringResource(id = R.string.register),
+                    onButtonClicked = {
                         sighUpViewModel.onEvent(SignupUIEvent.RegisterButtonClicked)
                     },
                     isEnabled = sighUpViewModel.allValidationsPassed.value
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
-                ClickableTextComponent(tryingToLogin = true , onTextSelected = {
+                ClickableTextComponent(tryingToLogin = true, onTextSelected = {
                     YogaTimeAppRouter.navigateTo(Screen.LoginScreen)
                 })
             }
 
+        }
     }
 
     SystemBackButtonHandler {

@@ -7,7 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Surface
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -24,6 +26,7 @@ import com.example.yogatime.R
 import com.example.yogatime.components.AddEventTextField
 import com.example.yogatime.components.AppToolbar
 import com.example.yogatime.components.ButtonComponent
+import com.example.yogatime.components.DisplayHomeBackgroundImage
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
@@ -71,38 +74,61 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
             )
         }
     ) {paddingValues ->
-        Surface(color = Color.White,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValues).padding(18.dp)
-        ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                NormalTextComponent(value = "Event")
-                HeadingTextComponent(value = "Add New Event")
-                Spacer(modifier = Modifier.height(40.dp))
-                AddEventTextField(
-                    labelValue = "Event Name",
-                    onTextSelected = {
-                                     addEventViewModel.onEvent(AddNewEvent_UIEvent.eventNameChanged(it))
-                    },
-                    errorStatus = addEventViewModel.AddNewEventState.value.EventNameError
-                )
-                PickDateFromToday("Pick Date", onDateSelected = {addEventViewModel.onEvent(AddNewEvent_UIEvent.dateChanged(it))},
-                    errorStatus =addEventViewModel.AddNewEventState.value.EventDateError)
-                PickTime(labelValue = "Pick time ", onTimeSelected = {addEventViewModel.onEvent(AddNewEvent_UIEvent.timeChanged(it))},
-                    errorStatus = addEventViewModel.AddNewEventState.value.EventTimeError)
-                NumberOfParticipante(labelValue = "number of participante", painterResource =painterResource(id = R.drawable.profile) , onTextSelected = {addEventViewModel.onEvent(AddNewEvent_UIEvent.NumberOfParticipantChanged(it))},
-                    errorStatus = addEventViewModel.AddNewEventState.value.NumberOfParticipantsError)
-                Spacer(modifier = Modifier.height(80.dp))
+        Box(modifier = Modifier.fillMaxWidth()) {
+            DisplayHomeBackgroundImage(painterResource = painterResource(id = R.drawable.homescreenbackground)
+            )
+            androidx.compose.material.Surface(
+                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    NormalTextComponent(value = "Event")
+                    HeadingTextComponent(value = "Add New Event")
+                    Spacer(modifier = Modifier.height(40.dp))
+                    AddEventTextField(
+                        labelValue = "Event Name",
+                        onTextSelected = {
+                            addEventViewModel.onEvent(AddNewEvent_UIEvent.eventNameChanged(it))
+                        },
+                        errorStatus = addEventViewModel.AddNewEventState.value.EventNameError
+                    )
+                    PickDateFromToday(
+                        "Pick Date",
+                        onDateSelected = {
+                            addEventViewModel.onEvent(
+                                AddNewEvent_UIEvent.dateChanged(it)
+                            )
+                        },
+                        errorStatus = addEventViewModel.AddNewEventState.value.EventDateError
+                    )
+                    PickTime(
+                        labelValue = "Pick time ",
+                        onTimeSelected = {
+                            addEventViewModel.onEvent(
+                                AddNewEvent_UIEvent.timeChanged(it)
+                            )
+                        },
+                        errorStatus = addEventViewModel.AddNewEventState.value.EventTimeError
+                    )
+                    NumberOfParticipante(
+                        labelValue = "number of participante",
+                        painterResource = painterResource(id = R.drawable.profile),
+                        onTextSelected = {
+                            addEventViewModel.onEvent(
+                                AddNewEvent_UIEvent.NumberOfParticipantChanged(it)
+                            )
+                        },
+                        errorStatus = addEventViewModel.AddNewEventState.value.NumberOfParticipantsError
+                    )
+                    Spacer(modifier = Modifier.height(80.dp))
 
-                ButtonComponent(value = "Add Event",
-                    onButtonClicked ={addEventViewModel.onEvent(AddNewEvent_UIEvent.AddNewEventButtonClicked)}
-                    ,
-                    isEnabled = addEventViewModel.allValidationsPassed.value
-                )
-                Spacer(modifier = Modifier.height(20.dp))
+                    ButtonComponent(value = "Add Event",
+                        onButtonClicked = { addEventViewModel.onEvent(AddNewEvent_UIEvent.AddNewEventButtonClicked) },
+                        isEnabled = addEventViewModel.allValidationsPassed.value
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
 
+                }
             }
         }
     }
