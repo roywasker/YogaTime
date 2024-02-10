@@ -2,7 +2,6 @@ package com.example.yogatime.data.gallery
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,12 +10,9 @@ import com.example.yogatime.data.ToolBar
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
-import java.io.InputStream
 import java.util.UUID
 
 class GalleryScreenViewModel : ViewModel() {
@@ -51,10 +47,10 @@ class GalleryScreenViewModel : ViewModel() {
             val storage = Firebase.storage
 
             // Create a storage reference from our app
-            var storageRef = storage.reference
+            val storageRef = storage.reference
 
             val unique_image_name = UUID.randomUUID()
-            var spaceRef: StorageReference
+            val spaceRef: StorageReference
             spaceRef = storageRef.child("images/$unique_image_name.jpg")
 
             val byteArray: ByteArray? = context.contentResolver
@@ -63,7 +59,7 @@ class GalleryScreenViewModel : ViewModel() {
 
             byteArray?.let {
 
-                var uploadTask = spaceRef.putBytes(byteArray)
+                val uploadTask = spaceRef.putBytes(byteArray)
                 uploadTask.addOnFailureListener {
                     Toast.makeText(
                         context,
@@ -87,6 +83,7 @@ class GalleryScreenViewModel : ViewModel() {
     }
 
 
+    /*
     // Function to upload image to Firebase Storage and then save its metadata to Firebase Realtime Database
     fun uploadImageToFirebaseStorage(imageStream: InputStream, fileName: String) {
         val user = FirebaseAuth.getInstance().currentUser
@@ -144,6 +141,7 @@ class GalleryScreenViewModel : ViewModel() {
             // Optionally handle failure, such as retry mechanisms
         }
     }
+    */
 
     fun onEvent(event : GalleryUIEvent) {
         when (event) {
@@ -162,7 +160,9 @@ class GalleryScreenViewModel : ViewModel() {
             is GalleryUIEvent.DelButtonClicked ->{
                 dellImage()
             }
-            else -> {}
+            is GalleryUIEvent.BackButtonClicked ->{
+                YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
+            }
         }
     }
 

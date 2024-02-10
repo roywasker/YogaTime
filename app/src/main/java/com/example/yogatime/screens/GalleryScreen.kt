@@ -66,12 +66,16 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
             NavigationDrawerHeader(ToolBar.fullNameId.value)
             NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
-                    if (it.itemId == "LogoutButton"){
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.LogoutButtonClicked)
-                    }else if (it.itemId == "homeScreen"){
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.HomeButtonClicked)
-                    }else if (it.itemId == "profileScreen"){
-                        galleryScreenViewModel.onEvent(GalleryUIEvent.ProfileButtonClicked)
+                    when (it.itemId) {
+                        "LogoutButton" -> {
+                            galleryScreenViewModel.onEvent(GalleryUIEvent.LogoutButtonClicked)
+                        }
+                        "homeScreen" -> {
+                            galleryScreenViewModel.onEvent(GalleryUIEvent.HomeButtonClicked)
+                        }
+                        "profileScreen" -> {
+                            galleryScreenViewModel.onEvent(GalleryUIEvent.ProfileButtonClicked)
+                        }
                     }
                 }
             )
@@ -100,6 +104,10 @@ fun GalleryScreen(galleryScreenViewModel: GalleryScreenViewModel = viewModel()) 
                     SmallButtonComponent(value = "Delete",
                         onButtonClicked = {
                             galleryScreenViewModel.onEvent(GalleryUIEvent.DelButtonClicked)
+                        })
+                    SmallButtonComponent(value = "back",
+                        onButtonClicked = {
+                            galleryScreenViewModel.onEvent(GalleryUIEvent.BackButtonClicked)
                         })
                 }
             }

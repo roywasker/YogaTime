@@ -60,12 +60,16 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
             NavigationDrawerHeader(ToolBar.fullNameId.value)
             NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
-                    if (it.itemId == "LogoutButton"){
-                        editUserViewModel.onEvent(EditUserUIEvent.LogoutButtonClicked)
-                    }else if (it.itemId == "homeScreen"){
-                        editUserViewModel.onEvent(EditUserUIEvent.HomeButtonClicked)
-                    }else if (it.itemId == "profileScreen"){
-                        editUserViewModel.onEvent(EditUserUIEvent.ProfileButtonClicked)
+                    when (it.itemId) {
+                        "LogoutButton" -> {
+                            editUserViewModel.onEvent(EditUserUIEvent.LogoutButtonClicked)
+                        }
+                        "homeScreen" -> {
+                            editUserViewModel.onEvent(EditUserUIEvent.HomeButtonClicked)
+                        }
+                        "profileScreen" -> {
+                            editUserViewModel.onEvent(EditUserUIEvent.ProfileButtonClicked)
+                        }
                     }
                 }
             )
@@ -84,7 +88,7 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    ToolBar.fullNameId.value?.let {
+                    ToolBar.fullNameId.value?.let { it ->
                         DisplayUserData(
                             value = it, label = stringResource(id = R.string.name),
                             onTextSelected = {
@@ -94,7 +98,7 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
                         )
                     }
 
-                    ToolBar.emailId.value?.let {
+                    ToolBar.emailId.value?.let { it ->
                         DisplayUserData(
                             value = it, label = stringResource(id = R.string.email),
                             onTextSelected = {
@@ -104,7 +108,7 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
                         )
                     }
 
-                    ToolBar.phoneId.value?.let {
+                    ToolBar.phoneId.value?.let { it ->
                         DisplayUserData(
                             value = it, label = stringResource(id = R.string.phone),
                             onTextSelected = {

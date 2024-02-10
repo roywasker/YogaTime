@@ -19,11 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
+import com.example.yogatime.components.DisplayDateForTrain
 import com.example.yogatime.components.DisplayHomeBackgroundImage
-import com.example.yogatime.components.DisplayNumberOfParticipanteForTrain
+import com.example.yogatime.components.DisplayNumberOfParticipantsForTrain
 import com.example.yogatime.components.DisplayTrainTime
 import com.example.yogatime.components.DisplayUserData
-import com.example.yogatime.components.DisplaydateforTrain
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextToLeftCornerComponent
@@ -66,12 +66,16 @@ fun TrainUserDisplayScreen(trainUserDisplayViewModel: TrainUserDisplayViewModel 
             NavigationDrawerHeader(ToolBar.fullNameId.value)
             NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
-                    if (it.itemId == "LogoutButton"){
-                        trainUserDisplayViewModel.onEvent(TrainUserDisplayUIState.LogoutButtonClicked)
-                    }else if (it.itemId == "homeScreen"){
-                        trainUserDisplayViewModel.onEvent(TrainUserDisplayUIState.HomeButtonClicked)
-                    }else if (it.itemId == "profileScreen"){
-                        trainUserDisplayViewModel.onEvent(TrainUserDisplayUIState.ProfileButtonClicked)
+                    when (it.itemId) {
+                        "LogoutButton" -> {
+                            trainUserDisplayViewModel.onEvent(TrainUserDisplayUIState.LogoutButtonClicked)
+                        }
+                        "homeScreen" -> {
+                            trainUserDisplayViewModel.onEvent(TrainUserDisplayUIState.HomeButtonClicked)
+                        }
+                        "profileScreen" -> {
+                            trainUserDisplayViewModel.onEvent(TrainUserDisplayUIState.ProfileButtonClicked)
+                        }
                     }
                 }
             )
@@ -86,19 +90,20 @@ fun TrainUserDisplayScreen(trainUserDisplayViewModel: TrainUserDisplayViewModel 
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    managerHomeViewModel.trainClick?.let {
-                        var currnetTrain = it
-//                    DisplayUserRegisterForTrain(it)
-                        DisplayUserData(value = currnetTrain.EventName,
+                    managerHomeViewModel.trainClick?.let { it ->
+                        //                    DisplayUserRegisterForTrain(it)
+                        DisplayUserData(
+                            value = it.EventName,
                             label = "Train Name",
                             onTextSelected = {
                                 trainUserDisplayViewModel.onEvent(
                                     TrainUserDisplayUIState.TrainNameChanged(it)
                                 )
                             },
-                            errorStatus = trainUserDisplayViewModel.editTrainDataUiState.value.EventNameError)
-                        DisplaydateforTrain(
-                            value = currnetTrain.EventDate, labelValue = "Event Date",
+                            errorStatus = trainUserDisplayViewModel.editTrainDataUiState.value.EventNameError
+                        )
+                        DisplayDateForTrain(
+                            value = it.EventDate, labelValue = "Event Date",
                             onDateSelected = {
                                 trainUserDisplayViewModel.onEvent(
                                     TrainUserDisplayUIState.DateChanged(it)
@@ -117,8 +122,8 @@ fun TrainUserDisplayScreen(trainUserDisplayViewModel: TrainUserDisplayViewModel 
                             },
                             errorStatus = trainUserDisplayViewModel.editTrainDataUiState.value.EventTimeError
                         )
-                        DisplayNumberOfParticipanteForTrain(
-                            value = currnetTrain.NumberOfParticipants,
+                        DisplayNumberOfParticipantsForTrain(
+                            value = it.NumberOfParticipants,
                             labelValue = "Number of Participants",
                             painterResource = painterResource(id = R.drawable.profile),
                             onTextSelected = {
@@ -134,7 +139,7 @@ fun TrainUserDisplayScreen(trainUserDisplayViewModel: TrainUserDisplayViewModel 
                             value = "Save",
                             onButtonClicked = {
                                 trainUserDisplayViewModel.onEvent(
-                                    TrainUserDisplayUIState.EditButtonClicked(currnetTrain)
+                                    TrainUserDisplayUIState.EditButtonClicked(it)
                                 )
                             },
                             isEnabled = trainUserDisplayViewModel.allValidationsPassed.value
@@ -150,7 +155,7 @@ fun TrainUserDisplayScreen(trainUserDisplayViewModel: TrainUserDisplayViewModel 
                         SmallButtonComponent(value = "delete",
                             onButtonClicked = {
                                 trainUserDisplayViewModel.onEvent(
-                                    TrainUserDisplayUIState.DeleteButtonClicked(currnetTrain)
+                                    TrainUserDisplayUIState.DeleteButtonClicked(it)
                                 )
                             })
 

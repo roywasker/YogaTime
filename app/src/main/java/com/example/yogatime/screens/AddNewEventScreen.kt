@@ -29,7 +29,7 @@ import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextComponent
-import com.example.yogatime.components.NumberOfParticipante
+import com.example.yogatime.components.NumberOfParticipants
 import com.example.yogatime.components.PickDateFromToday
 import com.example.yogatime.components.PickTime
 import com.example.yogatime.components.SmallButtonComponent
@@ -69,12 +69,16 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
             NavigationDrawerHeader(ToolBar.fullNameId.value)
             NavigationDrawerBody(navigationDrawerItems = ToolBar.navigationItemsList,
                 onNavigationItemClicked = {
-                    if (it.itemId == "LogoutButton"){
-                        addEventViewModel.onEvent(AddNewEvent_UIEvent.LogoutButtonClicked)
-                    }else if (it.itemId == "homeScreen"){
-                        addEventViewModel.onEvent(AddNewEvent_UIEvent.HomeButtonClicked)
-                    }else if (it.itemId == "profileScreen"){
-                        addEventViewModel.onEvent(AddNewEvent_UIEvent.ProfileButtonClicked)
+                    when (it.itemId) {
+                        "LogoutButton" -> {
+                            addEventViewModel.onEvent(AddNewEvent_UIEvent.LogoutButtonClicked)
+                        }
+                        "homeScreen" -> {
+                            addEventViewModel.onEvent(AddNewEvent_UIEvent.HomeButtonClicked)
+                        }
+                        "profileScreen" -> {
+                            addEventViewModel.onEvent(AddNewEvent_UIEvent.ProfileButtonClicked)
+                        }
                     }
                 }
             )
@@ -116,8 +120,8 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
                         },
                         errorStatus = addEventViewModel.AddNewEventState.value.EventTimeError
                     )
-                    NumberOfParticipante(
-                        labelValue = "number of participante",
+                    NumberOfParticipants(
+                        labelValue = "number of participants",
                         painterResource = painterResource(id = R.drawable.profile),
                         onTextSelected = {
                             addEventViewModel.onEvent(

@@ -67,7 +67,7 @@ class LoginViewModel : ViewModel() {
             .addOnCompleteListener{
                 if (it.isSuccessful){
                     val user = FirebaseAuth.getInstance().currentUser
-                    var isCoach = false
+                    var isCoach: Boolean
                     val databaseReference = FirebaseDatabase.getInstance().reference
                     val userReference = user?.let { it1 ->
                         databaseReference.child("users").child(it1.uid)
