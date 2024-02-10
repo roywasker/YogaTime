@@ -1,13 +1,11 @@
 package com.example.yogatime.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,16 +15,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.yogatime.components.HeadingTextComponent
-import com.example.yogatime.components.MyTextField
-import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.R
 import com.example.yogatime.components.BirthdayDatePicker
 import com.example.yogatime.components.ButtonComponent
 import com.example.yogatime.components.ClickableTextComponent
-import com.example.yogatime.components.DisplayBackgroundImage
+import com.example.yogatime.components.DisplayHomeBackgroundImage
+import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.MyEmailField
 import com.example.yogatime.components.MyPhoneField
+import com.example.yogatime.components.MyTextField
+import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.components.PasswordTextField
 import com.example.yogatime.data.sighup.SighUpViewModel
 import com.example.yogatime.data.sighup.SignupUIEvent
@@ -34,15 +32,22 @@ import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.SystemBackButtonHandler
 import com.example.yogatime.navigation.YogaTimeAppRouter
 
-
+/****************** Sign Up Screen ******************/
+/**
+ * The sign up screen, the user can create a new account by filling the required fields
+ * and clicking the register button, or navigate to the login screen
+ *
+ *
+ * @param sighUpViewModel the view model for the sign up screen
+ */
 @Composable
 fun SighUpScreen(sighUpViewModel: SighUpViewModel = viewModel()) {
 
     Box(modifier = Modifier.fillMaxWidth()) {
-        DisplayBackgroundImage()
+        DisplayHomeBackgroundImage(painterResource(id = R.drawable.background_yoga))
 
         Surface(
-            color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+            color = Color.Black.copy(alpha = 0.0f), // Adjust opacity and color
             modifier = Modifier.fillMaxSize()
         ) {
             Column(modifier = Modifier.fillMaxSize()) {

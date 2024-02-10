@@ -3,10 +3,8 @@ package com.example.yogatime.data.EditUser
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.yogatime.data.Client.ClientProfileUIState
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.rules.Validator
-import com.example.yogatime.data.sighup.RegistrationUiState
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import com.google.firebase.auth.FirebaseAuth
@@ -69,6 +67,9 @@ class EditUserViewModel: ViewModel() {
             }
             is  EditUserUIEvent.HomeButtonClicked ->{
                 moveTo(2)
+            }
+            is EditUserUIEvent.BackButtonClicked ->{
+                YogaTimeAppRouter.navigateTo(Screen.ClientProfileScreen)
             }
         }
     }

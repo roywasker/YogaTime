@@ -1,7 +1,5 @@
 package com.example.yogatime.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,12 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -28,24 +23,23 @@ import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
 import com.example.yogatime.components.DisplayHomeBackgroundImage
 import com.example.yogatime.components.DisplayUserData
-import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
-import com.example.yogatime.components.NormalTextComponent
-import com.example.yogatime.components.NormalTextToLeftCornerComponent
-import com.example.yogatime.components.RatingBar
-import com.example.yogatime.components.ReviewTextField
 import com.example.yogatime.components.SmallButtonComponent
-import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.EditUser.EditUserUIEvent
 import com.example.yogatime.data.EditUser.EditUserViewModel
 import com.example.yogatime.data.ToolBar
-import com.example.yogatime.data.sighup.SignupUIEvent
 import kotlinx.coroutines.launch
 
 
-
-
+/***************************** Edit User Data Screen *******************************/
+/**
+ *  EditUserDataScreen is a composable function which is used to display the edit user data screen.
+ *  In this screen, the user can edit his/her name, email, and phone number.
+ *  The user can also save the changes or back to the previous screen.
+ *
+ *  @param editUserViewModel is the view model for the edit user data screen.
+ */
 @Composable
 fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
 
@@ -77,12 +71,12 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().padding(paddingValues)) {
             DisplayHomeBackgroundImage(
                 painterResource = painterResource(id = R.drawable.homescreenbackground)
             )
             Surface(
-                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                color = Color.Black.copy(alpha = 0.0f), // Adjust opacity and color
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
@@ -129,6 +123,11 @@ fun EditUserDataScreen(editUserViewModel: EditUserViewModel = viewModel()) {
                         },
                         isEnabled = editUserViewModel.allValidationsPassed.value
                     )
+                    SmallButtonComponent(value = "Back",
+                        onButtonClicked = {
+                            editUserViewModel.onEvent(EditUserUIEvent.BackButtonClicked)
+
+                        })
                 }
             }
         }

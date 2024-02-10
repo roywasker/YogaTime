@@ -1,6 +1,5 @@
 package com.example.yogatime.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,14 +31,21 @@ import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.components.SmallButtonComponent
-import com.example.yogatime.data.Client.ClientProfileUIEvent
-import com.example.yogatime.data.Client.ClientProfileViewModel
 import com.example.yogatime.data.Manager.ManagerProfileUIEvent
 import com.example.yogatime.data.Manager.ManagerProfileViewModel
 import com.example.yogatime.data.ToolBar
-import com.example.yogatime.data.sighup.SignupUIEvent
 import kotlinx.coroutines.launch
 
+/***************************** Manager Profile Screen *******************************/
+/**
+ *  ManagerProfileScreen is a composable function which is used to display the profile screen of the manager.
+ *  In this screen, the manager can see his/her profile details.
+ *  The manager can also edit his/her profile details.
+ *  The manager can also give coach access to be a manager of the app.
+ *  The manager can also logout from the app or go to the home screen.
+ *
+ *  @param managerProfileViewModel is the view model for the manager profile screen.
+ */
 @Composable
 fun ManagerProfileScreen(managerProfileViewModel: ManagerProfileViewModel = viewModel()) {
     val scaffoldState = rememberScaffoldState()
@@ -70,12 +76,12 @@ fun ManagerProfileScreen(managerProfileViewModel: ManagerProfileViewModel = view
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().padding(paddingValues)) {
             DisplayHomeBackgroundImage(
                 painterResource = painterResource(id = R.drawable.homescreenbackground)
             )
             Surface(
-                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                color = Color.Black.copy(alpha = 0.0f), // Adjust opacity and color
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(

@@ -1,7 +1,5 @@
 package com.example.yogatime.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -21,7 +18,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -40,17 +36,27 @@ import com.example.yogatime.components.HorizontalRecyclerViewForTrain
 import com.example.yogatime.components.NavigationDrawerBody
 import com.example.yogatime.components.NavigationDrawerHeader
 import com.example.yogatime.components.NormalTextComponent
-import com.example.yogatime.components.NormalTextToLeftCornerComponent
 import com.example.yogatime.components.RatingBar
 import com.example.yogatime.components.ReviewTextField
 import com.example.yogatime.components.SmallButtonComponent
-import com.example.yogatime.data.Client.ClienHomeUIEvent
 import com.example.yogatime.data.Client.ClientHomeViewModel
 import com.example.yogatime.data.Client.ClientProfileUIEvent
 import com.example.yogatime.data.Client.ClientProfileViewModel
 import com.example.yogatime.data.ToolBar
 import kotlinx.coroutines.launch
 
+/***************************** Client Profile Screen *******************************/
+/**
+ *  ClientProfileScreen is a composable function which is used to display the profile screen of the client.
+ *  In this screen, the user can see his/her profile details.
+ *  The user can also edit his/her profile details.
+ *  The user can also delete the train that he/she has registered for.
+ *  The user can also rate the app.
+ *  The user can also logout from the app or go to the home screen.
+ *
+ *  @param clientProfileViewModel is the view model for the client profile screen.
+ *  @param clientHomeViewModel is the view model for the client home screen.
+ */
 @Composable
 fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewModel(), clientHomeViewModel: ClientHomeViewModel = viewModel()){
     val scaffoldState = rememberScaffoldState()
@@ -82,12 +88,12 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
             )
         }
     ) {paddingValues ->
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().padding(paddingValues)) {
             DisplayHomeBackgroundImage(
                 painterResource = painterResource(id = R.drawable.sun)
             )
             androidx.compose.material3.Surface(
-                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                color = Color.Black.copy(alpha = 0.0f), // Adjust opacity and color
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(

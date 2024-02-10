@@ -1,9 +1,7 @@
 package com.example.yogatime.data.sighup
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.yogatime.app.YogaTimeApp
 import com.example.yogatime.data.rules.Validator
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter

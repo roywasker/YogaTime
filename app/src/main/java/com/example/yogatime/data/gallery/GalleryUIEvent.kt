@@ -1,6 +1,5 @@
 package com.example.yogatime.data.gallery
 
-import com.example.yogatime.data.Client.ClienHomeUIEvent
 
 
 sealed class GalleryUIEvent{

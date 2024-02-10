@@ -1,6 +1,5 @@
 package com.example.yogatime.data.TrainUserDisplay
 
-import com.example.yogatime.data.AddEvent.AddNewEvent_UIEvent
 import com.example.yogatime.data.Manager.TrainUiState
 
 sealed class TrainUserDisplayUIState {

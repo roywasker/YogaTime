@@ -1,6 +1,5 @@
 package com.example.yogatime.data.sighup
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 
 data class RegistrationUiState(
     var fullName: String = "",

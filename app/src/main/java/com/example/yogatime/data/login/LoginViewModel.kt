@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 
+
 class LoginViewModel : ViewModel() {
 
     var loginUiState = mutableStateOf(LoginUIState())
@@ -53,6 +54,10 @@ class LoginViewModel : ViewModel() {
         allValidationsPassed.value = emailResult.status && passwordResult.status
     }
 
+    /**
+     * login to the app with the email and password to the firebase database for authentication
+     * and navigate to the home screen based on the user type
+     */
     private fun login() {
         val email = loginUiState.value.email
         val password = loginUiState.value.password

@@ -1,6 +1,5 @@
 package com.example.yogatime.data.AddEvent
 
-import java.io.InputStream
 
 data class AddNewEventState(
     var UserEmail : String = "",

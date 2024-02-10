@@ -3,9 +3,7 @@ package com.example.yogatime.data.AddEvent
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.yogatime.data.ToolBar
-import com.example.yogatime.data.rules.Validator
 import com.example.yogatime.data.rules.rules_new_event
-import com.example.yogatime.data.sighup.RegistrationUiState
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
 import com.google.firebase.auth.FirebaseAuth
@@ -52,6 +50,9 @@ class AddNewEventScreenViewModel : ViewModel(){
                 YogaTimeAppRouter.navigateTo(Screen.ManagerProfileScreen)
             }
             is AddNewEvent_UIEvent.HomeButtonClicked ->{
+                YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
+            }
+            is AddNewEvent_UIEvent.BackButtonClicked ->{
                 YogaTimeAppRouter.navigateTo(Screen.ManagerHomeScreen)
             }
 

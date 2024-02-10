@@ -1,14 +1,9 @@
 package com.example.yogatime.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.material3.Surface
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,10 +12,13 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AddEventTextField
@@ -34,13 +32,21 @@ import com.example.yogatime.components.NormalTextComponent
 import com.example.yogatime.components.NumberOfParticipante
 import com.example.yogatime.components.PickDateFromToday
 import com.example.yogatime.components.PickTime
+import com.example.yogatime.components.SmallButtonComponent
 import com.example.yogatime.data.AddEvent.AddNewEventScreenViewModel
 import com.example.yogatime.data.AddEvent.AddNewEvent_UIEvent
-
 import com.example.yogatime.data.ToolBar
 import kotlinx.coroutines.launch
 
 
+/***************************** Add New Event Screen *******************************/
+/**
+ *  AddNewEventScreen is a composable function which is used by the manager to add new train to the app for the users.
+ *  In this screen, the manager can add new train to the app.
+ *  The manager can also logout from the app or go to the home screen.
+ *
+ *  @param addEventViewModel is the view model for the add new event screen.
+ */
 @Composable
 fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel()) {
 
@@ -74,11 +80,11 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
             )
         }
     ) {paddingValues ->
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().padding(paddingValues)) {
             DisplayHomeBackgroundImage(painterResource = painterResource(id = R.drawable.homescreenbackground)
             )
             androidx.compose.material.Surface(
-                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                color = Color.Black.copy(alpha = 0.0f), // Adjust opacity and color
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
@@ -126,6 +132,10 @@ fun AddNewEventScreen(addEventViewModel: AddNewEventScreenViewModel = viewModel(
                         onButtonClicked = { addEventViewModel.onEvent(AddNewEvent_UIEvent.AddNewEventButtonClicked) },
                         isEnabled = addEventViewModel.allValidationsPassed.value
                     )
+                    SmallButtonComponent(value = "Back",
+                        onButtonClicked = {
+                            addEventViewModel.onEvent(AddNewEvent_UIEvent.BackButtonClicked)
+                        })
                     Spacer(modifier = Modifier.height(20.dp))
 
                 }

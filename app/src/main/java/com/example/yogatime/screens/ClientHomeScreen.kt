@@ -1,23 +1,22 @@
 package com.example.yogatime.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.material.Surface
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yogatime.R
 import com.example.yogatime.components.AppToolbar
-import com.example.yogatime.components.DisplayBackgroundImage
 import com.example.yogatime.components.DisplayHomeBackgroundImage
 import com.example.yogatime.components.HeadingTextComponent
 import com.example.yogatime.components.HorizontalRecyclerView
@@ -41,7 +39,16 @@ import com.example.yogatime.data.Client.ClientHomeViewModel
 import com.example.yogatime.data.ToolBar
 import kotlinx.coroutines.launch
 
-
+/***************************** Client Home Screen *******************************/
+/**
+ *  ClientHomeScreen is a composable function which is used to display the home screen of the client.
+ *  All the user options are displayed in this screen.
+ *  In this screen, the user can see the available trains, gallery, and rate.
+ *  The user can also register for the train.
+ *  The user can also logout from the app or go to the profile screen.
+ *
+ *  @param clientHomeViewModel is the view model for the client home screen.
+ */
 @Composable
 fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
 
@@ -77,11 +84,11 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
             )
         }
     ) {paddingValues ->
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().padding(paddingValues)) {
             DisplayHomeBackgroundImage(painterResource = painterResource(id = R.drawable.sun)
             )
             Surface(
-                color = Color.Black.copy(alpha = 0.4f), // Adjust opacity and color
+                color = Color.Black.copy(alpha = 0.0f), // Adjust opacity and color
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {

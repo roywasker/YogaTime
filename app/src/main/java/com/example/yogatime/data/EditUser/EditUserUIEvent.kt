@@ -1,8 +1,5 @@
 package com.example.yogatime.data.EditUser
 
-import com.example.yogatime.data.Client.ClienHomeUIEvent
-import com.example.yogatime.data.Client.ClientProfileUIEvent
-import com.example.yogatime.data.sighup.SignupUIEvent
 
 sealed class EditUserUIEvent {
 
@@ -15,5 +12,7 @@ sealed class EditUserUIEvent {
     object LogoutButtonClicked : EditUserUIEvent()
     object ProfileButtonClicked : EditUserUIEvent()
     object HomeButtonClicked : EditUserUIEvent()
+
+    object BackButtonClicked : EditUserUIEvent()
 
 }

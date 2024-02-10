@@ -1,21 +1,12 @@
 package com.example.yogatime.data.Manager
 
 import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AssignmentInd
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.yogatime.data.Client.ClientProfileUIEvent
-import com.example.yogatime.data.EditUser.EditUserViewModel
 import com.example.yogatime.data.ToolBar
-import com.example.yogatime.data.rules.NavigationItem
 import com.example.yogatime.data.sighup.RegistrationUiState
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

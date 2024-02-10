@@ -3,18 +3,12 @@ package com.example.yogatime.data.TrainUserDisplay
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.yogatime.data.Manager.ManagerHomeViewModel
-
 import com.example.yogatime.data.Manager.TrainUiState
 import com.example.yogatime.data.ToolBar
 import com.example.yogatime.data.rules.rules_new_event
 import com.example.yogatime.navigation.Screen
 import com.example.yogatime.navigation.YogaTimeAppRouter
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 class TrainUserDisplayViewModel : ViewModel() {
     var editTrainDataUiState = mutableStateOf(TrainUserDisplayUIEvent())

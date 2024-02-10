@@ -41,7 +41,6 @@ class ToolBar {
         fun logout() {
             val firebaseAuth = FirebaseAuth.getInstance()
             firebaseAuth.signOut()
-
             val authStateListener = FirebaseAuth.AuthStateListener {
                 if (it.currentUser == null) {
                     YogaTimeAppRouter.navigateTo(Screen.LoginScreen)

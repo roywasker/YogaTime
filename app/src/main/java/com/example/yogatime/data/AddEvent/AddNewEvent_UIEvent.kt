@@ -1,7 +1,5 @@
 package com.example.yogatime.data.AddEvent
 
-import com.example.yogatime.data.sighup.SignupUIEvent
-
 sealed class AddNewEvent_UIEvent {
 
     data class eventNameChanged(val EventName:String) : AddNewEvent_UIEvent()
@@ -13,4 +11,5 @@ sealed class AddNewEvent_UIEvent {
     object LogoutButtonClicked : AddNewEvent_UIEvent()
     object ProfileButtonClicked : AddNewEvent_UIEvent()
     object HomeButtonClicked : AddNewEvent_UIEvent()
+    object BackButtonClicked : AddNewEvent_UIEvent()
 }

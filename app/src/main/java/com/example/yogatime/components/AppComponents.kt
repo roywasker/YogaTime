@@ -1,12 +1,29 @@
 package com.example.yogatime.components
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.DatePicker
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -15,106 +32,84 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarOutline
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.yogatime.ui.theme.Primary
-import com.example.yogatime.ui.theme.TextColor
-import com.example.yogatime.ui.theme.componentShapes
-import com.example.yogatime.R
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
-import com.example.yogatime.data.rules.NavigationItem
-import com.example.yogatime.ui.theme.AccentColor
-import com.example.yogatime.ui.theme.Secondary
-import com.example.yogatime.ui.theme.WhiteColor
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.StarOutline
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import android.widget.DatePicker
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.MaterialTheme
-
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.example.yogatime.data.gallery.GalleryScreenViewModel
-import java.util.*
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.yogatime.R
 import com.example.yogatime.data.Client.ClientProfileUIState
-import com.example.yogatime.data.gallery.GallertUIStateForDisplay
-import com.example.yogatime.data.AddEvent.AddNewEventState
 import com.example.yogatime.data.Client.RegToTrainState
 import com.example.yogatime.data.Manager.TrainUiState
-import com.example.yogatime.data.TrainUserDisplay.TrainUserDisplayUIEvent
+import com.example.yogatime.data.gallery.GallertUIStateForDisplay
+import com.example.yogatime.data.gallery.GalleryScreenViewModel
+import com.example.yogatime.data.rules.NavigationItem
+import com.example.yogatime.ui.theme.AccentColor
+import com.example.yogatime.ui.theme.Primary
+import com.example.yogatime.ui.theme.Secondary
+import com.example.yogatime.ui.theme.TextColor
+import com.example.yogatime.ui.theme.WhiteColor
+import com.example.yogatime.ui.theme.componentShapes
+import java.util.*
 
 
+/**
+ * Creates a composable that displays a normal text with consistent styling.
+ *
+ * @param value The text content to be displayed.
+ */
 @Composable
 fun NormalTextComponent(value:String){
     Text(
@@ -132,6 +127,11 @@ fun NormalTextComponent(value:String){
     )
 }
 
+/**
+ * Creates a composable that displays a normal text with consistent styling to the left corner.
+ *
+ * @param value The text content to be displayed.
+ */
 @Composable
 fun NormalTextToLeftCornerComponent(value:String){
     Text(
@@ -149,6 +149,11 @@ fun NormalTextToLeftCornerComponent(value:String){
     )
 }
 
+/**
+ * Creates a composable that displays a heading text with consistent styling.
+ *
+ * @param value The text content to be displayed.
+ */
 @Composable
 fun HeadingTextComponent(value:String){
     Text(
@@ -166,6 +171,14 @@ fun HeadingTextComponent(value:String){
     )
 }
 
+/**
+ * Textbox for user input with a label and icon.
+ *
+ * @param labelValue The label to be displayed.
+ * @param painterResource The icon to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTextField(labelValue: String, painterResource: Painter,
@@ -208,6 +221,15 @@ fun MyTextField(labelValue: String, painterResource: Painter,
     }
 }
 
+
+/**
+ * Textbox for user to enter the event name.
+ *
+ * @param labelValue The label to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ * @param errorStatus The status of the text input.
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEventTextField(labelValue: String,
@@ -242,6 +264,14 @@ fun AddEventTextField(labelValue: String,
 }
 
 
+/**
+ * Textbox for user to enter the his phone number.
+ *
+ * @param labelValue The label to be displayed.
+ * @param painterResource The icon to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPhoneField(labelValue: String, painterResource: Painter,
@@ -287,6 +317,14 @@ fun MyPhoneField(labelValue: String, painterResource: Painter,
     }
 }
 
+/**
+ * Textbox for user to enter the his password.
+ *
+ * @param labelValue The label to be displayed.
+ * @param painterResource The icon to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextField(labelValue: String, painterResource: Painter,
@@ -304,7 +342,7 @@ fun PasswordTextField(labelValue: String, painterResource: Painter,
     }
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(0.99f)
             .background(Color.White.copy(alpha = 0.2f)) // Set background opacity
     ) {
         OutlinedTextField(
@@ -359,6 +397,14 @@ fun PasswordTextField(labelValue: String, painterResource: Painter,
     }
 }
 
+/**
+ * Textbox for user to enter the his email.
+ *
+ * @param labelValue The label to be displayed.
+ * @param painterResource The icon to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MyEmailField(labelValue: String,
@@ -370,7 +416,7 @@ fun MyEmailField(labelValue: String,
     }
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(0.99f)
             .background(Color.White.copy(alpha = 0.2f)) // Set background opacity
     ) {
         OutlinedTextField(
@@ -402,6 +448,7 @@ fun MyEmailField(labelValue: String,
         )
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -460,6 +507,14 @@ fun DateFromTodayPicker(
         })
 }
 
+/**
+ * Textbox for user to enter the his birthdate.
+ *
+ * @param labelValue The label to be displayed.
+ * @param onDateSelected The callback to be invoked when the date is selected.
+ * @param modifier The modifier to be applied to the text field.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BirthdayDatePicker(
@@ -533,13 +588,20 @@ fun BirthdayDatePicker(
 
 
 
+/**
+ * The main button style for the app
+ *
+ * @param value The text content to be displayed.
+ * @param onButtonClicked The callback to be invoked when the button is clicked.
+ * @param isEnabled The status of the button.
+ */
 @Composable
 fun ButtonComponent(value:String, onButtonClicked : () -> Unit, isEnabled : Boolean = false){
     Button(onClick = {
        onButtonClicked.invoke()
     },
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(0.99f)
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -596,6 +658,12 @@ fun DateFromTodayCompose(
 }
 
 
+/**
+ * The clickable text component for the login and register screen.
+ *
+ * @param tryingToLogin The status of the user.
+ * @param onTextSelected The callback to be invoked when the text is clicked.
+ */
 @Composable
 fun ClickableTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit) {
     val initialText =
@@ -637,6 +705,12 @@ fun ClickableTextComponent(tryingToLogin: Boolean = true, onTextSelected: (Strin
 }
 
 
+/**
+ * Main toolbar for the app organized the pages for navigation.
+ *
+ * @param toolbarTitle The title of the toolbar.
+ * @param navigationIconClicked The callback to be invoked when the icon is clicked.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppToolbar(toolbarTitle: String,navigationIconClicked :() ->Unit) {
@@ -667,6 +741,11 @@ fun AppToolbar(toolbarTitle: String,navigationIconClicked :() ->Unit) {
     )
 }
 
+/**
+ * Header for the navigation drawer.
+ *
+ * @param value The title of the header.
+ */
 @Composable
 fun NavigationDrawerHeader(value: String?) {
     Box(
@@ -750,6 +829,9 @@ fun PickImageFromGallery(viewModel: GalleryScreenViewModel) {
 
 }
 
+/**
+ * composable for picking a single photo from the gallery
+ */
 @Composable
 fun SinglePhotoPicker(){
     var uri by remember{
@@ -794,6 +876,13 @@ fun SinglePhotoPicker(){
     }
 }
 
+
+/**
+ * The component for the navigation in the app.
+ *
+ * @param navigationDrawerItems The list of items to be displayed.
+ * @param onNavigationItemClicked The callback to be invoked when the item is clicked.
+ */
 @Composable
 fun NavigationDrawerBody(navigationDrawerItems: List<NavigationItem>,
                          onNavigationItemClicked:(NavigationItem) -> Unit) {
@@ -806,6 +895,13 @@ fun NavigationDrawerBody(navigationDrawerItems: List<NavigationItem>,
     }
 }
 
+
+/**
+ * The component for Navigation Drawer Items to be displayed.
+ *
+ * @param item The item to be displayed.
+ * @param onNavigationItemClicked The callback to be invoked when the item is clicked.
+ */
 @Composable
 fun NavigationItemRow(item: NavigationItem,
                       onNavigationItemClicked:(NavigationItem) -> Unit) {
@@ -829,6 +925,14 @@ fun NavigationItemRow(item: NavigationItem,
         NavigationDrawerText(title = item.title, 18.sp, Primary)
     }
 }
+
+/**
+ * Text for the navigation drawer items for the title of the item.
+ *
+ * @param title The title of the item.
+ * @param textUnit The size of the text.
+ * @param color The color of the text.
+ */
 @Composable
 fun NavigationDrawerText(title: String, textUnit: TextUnit,color: Color) {
 
@@ -924,6 +1028,12 @@ fun showDatePicker(){
     }
 }*/
 
+
+/**
+ * The gallery representation for the user to see the images in the gallery.
+ *
+ * @param imageList The list of images to be displayed.
+ */
 @Composable
 fun HorizontalRecyclerView(imageList: List<GallertUIStateForDisplay>) {
     /*LazyRow  {
@@ -939,6 +1049,11 @@ fun HorizontalRecyclerView(imageList: List<GallertUIStateForDisplay>) {
     }
 }
 
+/**
+ * The image to be displayed in the gallery.
+ *
+ * @param imageData The image to be displayed.
+ */
 @Composable
 fun ImageToDisplay(imageData: GallertUIStateForDisplay) {
     Card(
@@ -960,6 +1075,14 @@ fun ImageToDisplay(imageData: GallertUIStateForDisplay) {
 }
 
 
+/**
+ * Rating bar for the user to rate the event.
+ *
+ * @param rating The rating of the event.
+ * @param stars The number of stars to be displayed.
+ * @param onRatingChanged The callback to be invoked when the rating is changed.
+ * @param starsColor The color of the stars.
+ */
 @Composable
 fun RatingBar(
     modifier: Modifier = Modifier,
@@ -1033,6 +1156,14 @@ fun DateFromToday(
         }
     )
 }
+
+/**
+ * Picker for the user to select the event date.
+ *
+ * @param labelValue The label to be displayed.
+ * @param onDateSelected The callback to be invoked when the date is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PickDateFromToday(
@@ -1084,6 +1215,12 @@ fun PickDateFromToday(
     )
 }
 
+/**
+ * Textbox for user to enter the his review on the event.
+ *
+ * @param labelValue The label to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewTextField(labelValue: String, onTextSelected: (String) -> Unit) {
@@ -1115,6 +1252,13 @@ fun ReviewTextField(labelValue: String, onTextSelected: (String) -> Unit) {
     )
 }
 
+/**
+ * The main small button style for the app
+ *
+ * @param value The text content to be displayed.
+ * @param onButtonClicked The callback to be invoked when the button is clicked.
+ * @param isEnabled The status of the button.
+ */
 @Composable
 fun SmallButtonComponent(value:String, onButtonClicked : () -> Unit, isEnabled: Boolean = true){
     Button(onClick = {
@@ -1144,6 +1288,11 @@ fun SmallButtonComponent(value:String, onButtonClicked : () -> Unit, isEnabled: 
     }
 }
 
+/**
+ * Present the users rating for the event.
+ *
+ * @param rateList The list of ratings to be displayed.
+ */
 @Composable
 fun HorizontalRecyclerViewForRate(rateList: List<ClientProfileUIState>) {
     Row (modifier = Modifier.horizontalScroll(rememberScrollState())) {
@@ -1153,6 +1302,11 @@ fun HorizontalRecyclerViewForRate(rateList: List<ClientProfileUIState>) {
     }
 }
 
+/**
+ * The rating to be displayed for the event.
+ *
+ * @param rateData The rating to be displayed.
+ */
 @Composable
 fun RateToDisplay(rateData: ClientProfileUIState) {
     Card(
@@ -1176,6 +1330,14 @@ fun RateToDisplay(rateData: ClientProfileUIState) {
     }
 }
 
+/**
+ * Present the user data like name, email, and phone number to be displayed with options to edit.
+ *
+ * @param value The value to be displayed.
+ * @param label The label to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayUserData(value : String,
@@ -1208,6 +1370,13 @@ fun DisplayUserData(value : String,
     )
 }
 
+/**
+ * Textbox for manager to pick the event time.
+ *
+ * @param labelValue The label to be displayed.
+ * @param onTimeSelected The callback to be invoked when the time is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PickTime(
@@ -1257,6 +1426,14 @@ fun PickTime(
         maxLines = 1
     )
 }
+
+/**
+ * Textbox for manager for Add Event to pick the number of participants.
+ *
+ * @param labelValue The label to be displayed.
+ * @param onDateSelected The callback to be invoked when the date is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NumberOfParticipante(
@@ -1295,6 +1472,13 @@ fun NumberOfParticipante(
         isError = !errorStatus
     )
 }
+
+/**
+ * Present the existing trains for user to select.
+ *
+ * @param TrainList The list of trains to be displayed.
+ * @param onImageClick The callback to be invoked when the image is clicked.
+ */
 @Composable
 fun HorizontalRecyclerViewForTrain(TrainList: List<RegToTrainState>, onImageClick: (RegToTrainState) -> Unit) {
     var selectedCardIndex by remember { mutableStateOf(-1) }
@@ -1308,6 +1492,12 @@ fun HorizontalRecyclerViewForTrain(TrainList: List<RegToTrainState>, onImageClic
     }
 }
 
+/**
+ * The train to be displayed for the user to select.
+ *
+ * @param trainData The train to be displayed.
+ * @param onImageClick The callback to be invoked when the image is clicked.
+ */
 @Composable
 fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -> Unit, isSelected: Boolean, onCardClick: () -> Unit) {
     Card(
@@ -1362,6 +1552,12 @@ fun TrainToDisplay(trainData: RegToTrainState, onImageClick: (RegToTrainState) -
 }
 
 
+/**
+ * Present the existing picture to delete.
+ *
+ * @param imageList The list of images to be displayed.
+ * @param onImageClick The callback to be invoked when the image is clicked.
+ */
 @Composable
 fun HorizontalRecyclerViewForDelImage(imageList: List<GallertUIStateForDisplay>, onImageClick: (String) -> Unit) {
     var selectedCardIndex by remember { mutableStateOf(-1) }
@@ -1377,6 +1573,13 @@ fun HorizontalRecyclerViewForDelImage(imageList: List<GallertUIStateForDisplay>,
         }
     }
 }
+
+/**
+ * The image to be displayed for the manager to delete.
+ *
+ * @param imageData The image to be displayed.
+ * @param onImageClick The callback to be invoked when the image is clicked.
+ */
 @Composable
 fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick: (String) -> Unit,isSelected: Boolean, onCardClick: () -> Unit) {
     Card(
@@ -1401,6 +1604,12 @@ fun ImageToDisplayForDelImage(imageData: GallertUIStateForDisplay, onImageClick:
     }
 }
 
+/**
+ * Present the existing trains for manager to select.
+ *
+ * @param TrainList The list of trains to be displayed.
+ * @param onImageClick The callback to be invoked when the image is clicked.
+ */
 @Composable
 fun HorizontalRecyclerViewForTrainForManager(TrainList: List<TrainUiState>, onImageClick: (TrainUiState) -> Unit) {
     var selectedCardIndex by remember { mutableStateOf(-1) }
@@ -1418,6 +1627,12 @@ fun HorizontalRecyclerViewForTrainForManager(TrainList: List<TrainUiState>, onIm
 }
 
 
+/**
+ * The train to be displayed for the manager to select.
+ *
+ * @param trainData The train to be displayed.
+ * @param onImageClick The callback to be invoked when the image is clicked.
+ */
 @Composable
 fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiState) -> Unit,isSelected: Boolean, onCardClick: () -> Unit) {
     val numberOfParticipants: Int = trainData.NumberOfParticipants.toIntOrNull() ?: 0 // Safely convert to Int, default to 0 if conversion fails
@@ -1510,6 +1725,10 @@ fun DisplayUserRegisterForTrain(trainData: TrainUiState){
     }
 }
 
+/**
+ * Present the selected train to see the details.
+ * @param trainData The train to be displayed.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayTrainTime(
@@ -1560,6 +1779,14 @@ fun DisplayTrainTime(
         maxLines = 1
     )
 }
+
+/**
+ * Present the selected train to see the details.
+ * @param value The value to be displayed.
+ * @param labelValue The label to be displayed.
+ * @param onDateSelected The callback to be invoked when the date is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplaydateforTrain(value: String,
@@ -1610,14 +1837,23 @@ fun DisplaydateforTrain(value: String,
         maxLines = 1
     )
 }
+
+/**
+ * Present the selected train to see the number of participants for the event.
+ *
+ * @param value The value to be displayed.
+ * @param labelValue The label to be displayed.
+ * @param painterResource The icon to be displayed.
+ * @param onTextSelected The callback to be invoked when the text is selected.
+ * @param errorStatus The status of the text input.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayNumberOfParticipanteforTrain(value: String,
-    labelValue: String,
-    painterResource: Painter,
-    onTextSelected: (String) -> Unit,
-    errorStatus: Boolean = false
-) {
+fun DisplayNumberOfParticipanteForTrain(value: String,
+                                        labelValue: String,
+                                        painterResource: Painter,
+                                        onTextSelected: (String) -> Unit,
+                                        errorStatus: Boolean = false) {
     val textValue = remember { mutableStateOf(value) }
 
     OutlinedTextField(
@@ -1649,18 +1885,13 @@ fun DisplayNumberOfParticipanteforTrain(value: String,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DisplayBackgroundImage()
-{
-    Image(
-        painter = painterResource(id = R.drawable.background_yoga),
-        contentDescription = "Background image",
-        modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.FillBounds // Adjust image scaling as needed
-    )
-}
 
+
+/**
+ * Present the background image for each screen in the app.
+ *
+ * @param painterResource The painter resource for the image.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayHomeBackgroundImage(painterResource: Painter)
