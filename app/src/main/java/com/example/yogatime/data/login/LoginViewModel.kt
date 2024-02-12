@@ -90,6 +90,10 @@ class LoginViewModel : ViewModel() {
                     popupMessage.value = "your email or password is not correct"
                 }
             }
+        loginUiState.value = loginUiState.value.copy(
+            email = "",
+            password = "",
+        )
     }
 
 }
