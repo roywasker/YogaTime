@@ -214,12 +214,10 @@ class ClientHomeViewModel :ViewModel() {
                             if (trainId != null) {
                                 getUpdatesFromTrain(trainId) { train ->
                                     if (train != null) {
-                                        if (train.NumberOfParticipants !="0") {
-                                            val eventDate = parseDate(train.EventDate)
-                                            if (eventDate >= currentDate) {
-                                                train.trainId = trainId.toString()
-                                                newTrainList.add(train)
-                                            }
+                                        val eventDate = parseDate(train.EventDate)
+                                        if (eventDate >= currentDate) {
+                                            train.trainId = trainId.toString()
+                                            newTrainList.add(train)
                                         }
                                     }else{
                                         usersReference.child(trainId).setValue(null)
