@@ -118,14 +118,12 @@ class ClientHomeViewModel :ViewModel() {
     }
 
     fun getTrains() {
-        getTrainsForUser()
         val database = FirebaseDatabase.getInstance()
         val databaseRef = database.reference.child("AddNewEvent")
         val currentDate = Date()
         databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val newTrainList = mutableListOf<RegToTrainState>()
-
                 for (snapshot in dataSnapshot.children) {
                     try {
                         val trainId =snapshot.key
@@ -160,7 +158,6 @@ class ClientHomeViewModel :ViewModel() {
                 Log.e(ContentValues.TAG, "Error fetching data: ${error.message}")
             }
         })
-        pullTrain()
     }
 
     private fun pullTrain(){
@@ -192,6 +189,7 @@ class ClientHomeViewModel :ViewModel() {
                             Log.d(TAG, "Inside add train ")
                             UpdateTrain()
                             popupMessage.value = "You register to this train"
+                            usersReference.removeEventListener(this)
                         }
                 }
                 override fun onCancelled(error: DatabaseError) {
@@ -199,7 +197,7 @@ class ClientHomeViewModel :ViewModel() {
             })
         }
     }
-    private fun getTrainsForUser() {
+    fun getTrainsForUser() {
         val user = FirebaseAuth.getInstance().currentUser
         val currentDate = Date()
         user?.let { it ->
@@ -223,6 +221,8 @@ class ClientHomeViewModel :ViewModel() {
                                                 newTrainList.add(train)
                                             }
                                         }
+                                    }else{
+                                        usersReference.child(trainId).setValue(null)
                                     }
                                 }
                             }
@@ -230,15 +230,14 @@ class ClientHomeViewModel :ViewModel() {
                             Log.e(ContentValues.TAG, "Error parsing data: ${e.message}")
                         }
                     }
-                    /*
-                    newTrainList.sortBy { parseDate(it.EventDate)}
-                    trainListForUser.clear()
-                    trainListForUser.addAll(newTrainList)*/
+                    usersReference.removeEventListener(this)
                 }
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
         }
+        pullTrain()
+        getTrains()
     }
 
     private fun UpdateTrain() {
