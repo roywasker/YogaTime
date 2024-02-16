@@ -92,7 +92,6 @@ class ClientProfileViewModel : ViewModel() {
             databaseRefToUser?.setValue(null)?.addOnSuccessListener {
                 popupMessage.value="Train delete successfully"
             }
-
             updateTrainInDelete()
         }
     }
