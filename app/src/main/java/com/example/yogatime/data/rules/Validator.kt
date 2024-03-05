@@ -1,5 +1,7 @@
 package com.example.yogatime.data.rules
 
+import android.util.Patterns
+
 object Validator {
 
     fun validatorFullName(fullName : String) : ValidationResult{
@@ -10,7 +12,8 @@ object Validator {
 
     fun validatorEmail(email : String) : ValidationResult{
         return ValidationResult(
-            (!email.isNullOrEmpty()&&email.length>=7)
+            email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
         )
     }
 
