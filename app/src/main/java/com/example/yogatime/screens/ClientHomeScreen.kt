@@ -56,9 +56,9 @@ fun ClientHomeScreen (clientHomeViewModel: ClientHomeViewModel = viewModel()) {
     val coroutineScope = rememberCoroutineScope()
 
     ToolBar.getUserData()
+    clientHomeViewModel.getTrainsForUser()
     clientHomeViewModel.getImage()
     clientHomeViewModel.getRate()
-    clientHomeViewModel.getTrains()
 
     Scaffold(
         scaffoldState = scaffoldState,

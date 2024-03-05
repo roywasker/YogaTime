@@ -29,6 +29,7 @@ class ClientHomeViewModel :ViewModel() {
     var trainListForUser = mutableStateListOf<RegToTrainState>()
     private var trainToReg : RegToTrainState? = null
     val popupMessage = mutableStateOf<String?>(null)
+    val newTrainList = mutableListOf<RegToTrainState>()
 
     private val TAG = ClientHomeViewModel::class.simpleName
 
@@ -117,14 +118,12 @@ class ClientHomeViewModel :ViewModel() {
     }
 
     fun getTrains() {
-        getTrainsForUser()
         val database = FirebaseDatabase.getInstance()
         val databaseRef = database.reference.child("AddNewEvent")
         val currentDate = Date()
         databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val newTrainList = mutableListOf<RegToTrainState>()
-
                 for (snapshot in dataSnapshot.children) {
                     try {
                         val trainId =snapshot.key
@@ -161,6 +160,12 @@ class ClientHomeViewModel :ViewModel() {
         })
     }
 
+    private fun pullTrain(){
+        newTrainList.sortBy { parseDate(it.EventDate)}
+        trainListForUser.clear()
+        trainListForUser.addAll(newTrainList)
+    }
+
     // Function to parse the date string
     private fun parseDate(dateString: String): Date {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -177,15 +182,14 @@ class ClientHomeViewModel :ViewModel() {
             usersReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val userMap = hashMapOf(
-                        "EventName" to trainToReg?.EventName,
-                        "EventDate" to trainToReg?.EventDate,
-                        "EventTime" to trainToReg?.EventTime,
+                        "EventId" to trainToReg?.trainId,
                     )
                     usersReference.setValue(userMap)
                         .addOnSuccessListener {
                             Log.d(TAG, "Inside add train ")
                             UpdateTrain()
                             popupMessage.value = "You register to this train"
+                            usersReference.removeEventListener(this)
                         }
                 }
                 override fun onCancelled(error: DatabaseError) {
@@ -193,7 +197,7 @@ class ClientHomeViewModel :ViewModel() {
             })
         }
     }
-    private fun getTrainsForUser() {
+    fun getTrainsForUser() {
         val user = FirebaseAuth.getInstance().currentUser
         val currentDate = Date()
         user?.let { it ->
@@ -202,17 +206,21 @@ class ClientHomeViewModel :ViewModel() {
             val usersReference = database.reference.child("users").child(uid).child("trains")
             usersReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val newTrainList = mutableListOf<RegToTrainState>()
+                    //val newTrainList = mutableListOf<RegToTrainState>()
+                    newTrainList.clear()
                     for (snapshot in dataSnapshot.children) {
                         try {
                             val trainId =snapshot.key
-                            val train = snapshot.getValue(RegToTrainState::class.java)
-                            train?.let {
-                                if (train.NumberOfParticipants !="0") {
-                                    val eventDate = parseDate(train.EventDate)
-                                    if (eventDate >= currentDate) {
-                                        it.trainId = trainId.toString()
-                                        newTrainList.add(it)
+                            if (trainId != null) {
+                                getUpdatesFromTrain(trainId) { train ->
+                                    if (train != null) {
+                                        val eventDate = parseDate(train.EventDate)
+                                        if (eventDate >= currentDate) {
+                                            train.trainId = trainId.toString()
+                                            newTrainList.add(train)
+                                        }
+                                    }else{
+                                        usersReference.child(trainId).setValue(null)
                                     }
                                 }
                             }
@@ -220,14 +228,14 @@ class ClientHomeViewModel :ViewModel() {
                             Log.e(ContentValues.TAG, "Error parsing data: ${e.message}")
                         }
                     }
-                    newTrainList.sortBy { parseDate(it.EventDate) }
-                    trainListForUser.clear()
-                    trainListForUser.addAll(newTrainList)
+                    usersReference.removeEventListener(this)
                 }
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
         }
+        pullTrain()
+        getTrains()
     }
 
     private fun UpdateTrain() {
@@ -277,4 +285,19 @@ class ClientHomeViewModel :ViewModel() {
             }
         })
     }
+
+    private fun getUpdatesFromTrain(trainId: String, callback: (RegToTrainState?) -> Unit) {
+        val database = FirebaseDatabase.getInstance()
+        val trainReference = database.reference.child("AddNewEvent").child(trainId)
+        trainReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val train = dataSnapshot.getValue(RegToTrainState::class.java)
+                callback(train)
+            }
+            override fun onCancelled(error: DatabaseError) {
+                callback(null)
+            }
+        })
+    }
+
 }

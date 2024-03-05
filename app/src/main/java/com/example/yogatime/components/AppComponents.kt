@@ -1400,7 +1400,7 @@ fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiStat
             )
 
             Text(
-                text = "Participants that are left : ${(trainData.NumberOfParticipants).toInt()-(trainData.userList?.size?:0)}",
+                text = "Participants that left : ${(trainData.NumberOfParticipants).toInt()-(trainData.userList?.size?:0)}",
                 style = TextStyle(
                     color = Color.Black,
                     fontSize = 10.sp,
@@ -1408,17 +1408,6 @@ fun TrainToDisplayForManager(trainData: TrainUiState, onImageClick: (TrainUiStat
                     fontStyle = FontStyle.Italic,
                 )
             )
-            Text(
-                text = "Participants that are sing: ${(trainData.userList?.size?:0)}",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontSize = 10.sp,
-                    fontFamily = FontFamily.Monospace,
-                    fontStyle = FontStyle.Italic,
-                )
-            )
-
-
         }
     }
 }

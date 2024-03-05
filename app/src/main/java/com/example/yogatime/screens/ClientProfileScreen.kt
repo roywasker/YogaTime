@@ -64,6 +64,7 @@ fun ClientProfileScreen(clientProfileViewModel: ClientProfileViewModel = viewMod
     var rating by remember { mutableIntStateOf(4) }
 
     ToolBar.getUserData()
+    clientHomeViewModel.getTrainsForUser()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar ={
