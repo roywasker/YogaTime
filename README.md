@@ -86,4 +86,4 @@ In this screen the manager can upload or delete images of the studio.
 
 
 
-## Editors: Roni Michaeli, Roy Wasker and Elor Israeli 
+## Editors: Roni Michaeli 209233873, Roy Wasker 208957084 and Elor Israeli 315465260
