@@ -1,89 +1,41 @@
+# YogaTime
 
-# YogaTime Application
+YogaTime is a mobile application designed to connect yoga trainers and users. It allows users to view available yoga sessions, register, and interact with studio ratings and images, while trainers can create events and manage their sessions.
 
-## Project description:
+## Features
 
-This is an application for the trainer to create a train of yoga that the users could register to.
+### Authentication
+- **Login Screen**: Users can log into the app using their email and password. If the user doesn't have an account, they can navigate to the registration screen.<br><br>
+![login Screen](image/login.jpg)<br><br>
 
-The user can see the available trains, the images of the studio and rating of the studio.
+- **Register Screen**: New users can create an account by providing their email, password, and other personal details. After registering, they can log into the app to access all features.<br><br>
+![register Screen](image/register.jpg)<br>
 
+### User Side
+- **Home Screen**: View available yoga sessions, along with studio images and reviews.<br>
+Users can browse through various yoga sessions, see ratings and feedback from other users, and register for a session directly.<br><br>
+![Home Screen](image/Home_screen.jpg)<br><br>
 
+- **Profile**: Edit personal details, see registered sessions, and write reviews for sessions they have attended.<br><br>
+![user profile](image/user_profile.jpg)<br>
 
-## Client
-The part of the users, this is when the user register to the application his data will be saved in the database.
-
-
-### Home Screen
-
-After the user is login from the login screen (after registaretion), 
-
-he can see the available trains and register to them, 
-
-the images of the studio and rating of the studio.
-
-
-### Profile Screen
-
-The user can see his profile and edit his details in the edit profile screen.
-
-The user can see the trains that he register to in the my trains screen.
-
-The user can rate the studio.
-
-
-### Edit User Data Screen
-
-The user can edit his details in this screen, save or go back to the home screen.
+### Trainer Side
+- **Manage Sessions**: Create and manage yoga sessions and view feedback from users.<br><br>
+![trainer home](image/trainer_home.jpg) ![add train](image/add_train.jpg)
+- **Gallery**: Upload and delete studio images.<br><br>
+![add image](image/add_image.jpg)<br><br>
+- **Manage Sessions**: Manage yoga sessions.<br><br>
+![edit train](image/edit_train.jpg)<br><br>
+- **Profile**: Edit personal details, add new coach.<br><br>
+![train profile](image/train_profile.jpg)<br>
+## Tech Stack
+- Kotlin
+- Firebase for user data and session management.
 
 
+## Contributors
+- Elor Israeli
+- Roy Wasker
+- Roni Michaeli
 
-## Manager
-
-The part of the trainer, this is the place the trainer can create a new train and see the users that register to his trains, also to upload images of the studio and see the studio ratings.
-
-
-### Home Screen
-
-After the manager is login from the login screen, he can see all the trains that exists.
-
-The manager can go to the create new event to create a new trains. 
-
-The manager can see the existing rates of the studio.
-
-The manager can go to the gallery page to upload or delete images of the studio.
-
-
-
-### Profile Screen
-
-The manager can see his profile and edit his details in the edit profile screen.
-
-The manager can see the trains that he register to in the my trains screen.
-
-The manager can rate the studio.
-
-
-### Edit User Data Screen
-
-The manager can edit his details in this screen, save or go back to the home screen.
-
-The manager can give access to new existing account (user) by email to be manager as well.
-
-
-### Add New Event Screen
-
-The manager can create a new train in this screen and the data will be saved in the database,
-
- this train will be available for the users to register to.
-
-In this screen there is option to save the train or go back to the home screen.
-
-
-### Gallery Screen
-
-In this screen the manager can upload or delete images of the studio.
-
-
-
-
-## Editors: Roni Michaeli, Roy Wasker and Elor Israeli
+---
